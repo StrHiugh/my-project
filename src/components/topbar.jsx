@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Topbar.css';  // Archivo CSS para los estilos
 import {
     Navbar,
@@ -14,7 +14,6 @@ import {
     Avatar
 } from "@nextui-org/react";
 import {Switch} from "@nextui-org/react";
-
 
 const Topbar = () => {
     const AcmeLogo = () => (
@@ -93,7 +92,9 @@ const Topbar = () => {
                 </g>
             </svg>
         );
+
 return (
+
     <Navbar isBordered>
         <NavbarContent justify="start">
             <NavbarBrand className="mr-4">
