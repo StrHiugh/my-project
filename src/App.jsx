@@ -2,6 +2,7 @@ import './App.css';
 import Sidebar, { SidebarItem } from "./components/global/Sidebar.jsx";
 import { BarChart, Cpu, LayoutDashboard, Route, SquareChartGantt, SquareDashedKanban } from "lucide-react";
 import Topbar from "./components/global/Topbar.jsx";
+import Proceso from "./components/proceso/Proceso.jsx";
 
 function App() {
     return (
@@ -22,8 +23,8 @@ function App() {
                 <Topbar />
 
                 {/* Main content justo debajo del Topbar */}
-                <section className="p-6 mt-16"> {/* Usar `mt-16` para ajustar la distancia debajo del Topbar */}
-                    <h1>Bienvenido al Dashboard</h1>
+                <section className="p-14 mt-16"> {/* Usar `mt-16` para ajustar la distancia debajo del Topbar */}
+                    <Proceso/>
                 </section>
             </div>
         </div>
