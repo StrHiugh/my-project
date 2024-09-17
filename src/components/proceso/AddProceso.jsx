@@ -48,7 +48,7 @@ export default function AddProceso({ isOpen, onClose, backdrop, setBackdrop }) {
                             <Button color="danger" variant="flat" onPress={onClose}>
                                 Close
                             </Button>
-                            <Button color="primary" onPress={onClose}>
+                            <Button color="secondary" onPress={onClose}>
                                 Sign in
                             </Button>
                         </ModalFooter>
