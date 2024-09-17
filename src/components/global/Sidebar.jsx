@@ -1,7 +1,7 @@
 import {useState, useContext, createContext} from "react";
 import {Button, ButtonGroup} from "@nextui-org/react";
 import {ChevronFirst, ChevronLast} from "lucide-react";
-
+import './Sidebar.css';
 const SidebarContext = createContext()
 
 export default function Sidebar({ children }) {

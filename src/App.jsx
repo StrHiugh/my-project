@@ -1,10 +1,11 @@
-import './App.css'
+import './App.css';
 import Sidebar, { SidebarItem } from "./components/global/Sidebar.jsx";
 import { BarChart, Cpu, LayoutDashboard, Route, SquareChartGantt, SquareDashedKanban } from "lucide-react";
+import Topbar from "./components/global/Topbar.jsx";
 
 function App() {
     return (
-        <main className="App flex">
+        <div className="App flex">
             {/* Sidebar */}
             <Sidebar>
                 <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" alert />
@@ -16,12 +17,16 @@ function App() {
                 <SidebarItem icon={<SquareDashedKanban size={20} />} text="Sensores" />
             </Sidebar>
 
-            {/* Main content */}
-            <section className="ml-32 p-6 transition-margin duration-300">
-                {/* Aquí irá el contenido principal de tu aplicación */}
-                <h1>Bienvenido al Dashboard</h1>
-            </section>
-        </main>
+            <div className="content flex flex-col w-full">
+                {/* Topbar fijo arriba */}
+                <Topbar />
+
+                {/* Main content justo debajo del Topbar */}
+                <section className="p-6 mt-16"> {/* Usar `mt-16` para ajustar la distancia debajo del Topbar */}
+                    <h1>Bienvenido al Dashboard</h1>
+                </section>
+            </div>
+        </div>
     );
 }
 

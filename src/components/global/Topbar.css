@@ -1,0 +1,42 @@
+.topbar {
+    position: fixed;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    height: 64px; /* Altura del Topbar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Ajuste lateral */
+    margin: 0; /* Eliminar margen */
+}
+
+
+.App .content {
+    margin-left: 150px; /* Ajusta esto según el ancho del Sidebar */
+    padding: 0; /* Eliminar cualquier padding */
+    display: flex;
+}
+
+section {
+    margin-top: 50px; /* Para que el contenido esté justo debajo del Topbar */
+}
+
+.logo h1 {
+    margin: 0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px; /* Espaciado uniforme entre los links */
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold; /* Opción para resaltar los enlaces */
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
