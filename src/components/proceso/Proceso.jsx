@@ -11,14 +11,22 @@ import {
 import {Plus, } from "lucide-react";
 import "./Proceso.css"
 import AddProceso from "./AddProceso";
+
+import { useNavigate } from 'react-router-dom';  // Hook para la redirección
+
 function Proceso() {
     const [processes, setProcesses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalBackdrop, setModalBackdrop] = useState('blur');
+    const navigate = useNavigate();  // Inicializa el hook para redirección
 
-
+    const handleSignIn = () => {
+        // Aquí puedes añadir cualquier lógica, como autenticación
+        // Luego redirige a la nueva vista
+        navigate("/other");  // Cambia "/other" a la ruta a la que quieras redirigir
+    };
     useEffect(() => {
             fetch('http://localhost:8000/api/v1/proceso/', {
                 method: 'GET',
@@ -60,7 +68,7 @@ function Proceso() {
             case "description":
                 return item.descripcion;
             case "actions":
-                return <Button color="secondary">Ver</Button>;
+                return <Button color="secondary" >Ver</Button>;
             default:
                 return null;
         }

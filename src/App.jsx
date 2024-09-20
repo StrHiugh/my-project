@@ -23,7 +23,7 @@ function App() {
                 <Topbar />
 
                 {/* Main content justo debajo del Topbar */}
-                <section className="p-14 mt-16"> {/* Usar `mt-16` para ajustar la distancia debajo del Topbar */}
+                <section className="p-10 mt-10">
                     <Proceso/>
                 </section>
             </div>

@@ -15,7 +15,7 @@ export default function AddProceso({ isOpen, onClose, backdrop, setBackdrop }) {
             <ModalContent>
                 {(onClose) => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1">Añadir Procesos</ModalHeader>
                         <ModalBody>
                             <Input
                                 autoFocus
@@ -39,7 +39,7 @@ export default function AddProceso({ isOpen, onClose, backdrop, setBackdrop }) {
                                 <Checkbox classNames={{ label: "text-small" }}>
                                     Remember me
                                 </Checkbox>
-                                <Link color="primary" href="#" size="sm">
+                                <Link color="secondary" href="#" size="sm">
                                     Forgot password?
                                 </Link>
                             </div>
