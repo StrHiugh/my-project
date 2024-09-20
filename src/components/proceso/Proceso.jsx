@@ -6,13 +6,13 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Button,
+    Button, Pagination, Card, CardBody,
 } from "@nextui-org/react";
-import {Plus, } from "lucide-react";
+import {Plus,} from "lucide-react";
 import "./Proceso.css"
 import AddProceso from "./AddProceso";
 
-import { useNavigate } from 'react-router-dom';  // Hook para la redirección
+import {useNavigate} from 'react-router-dom';  // Hook para la redirección
 
 function Proceso() {
     const [processes, setProcesses] = useState([]);
@@ -22,35 +22,31 @@ function Proceso() {
     const [modalBackdrop, setModalBackdrop] = useState('blur');
     const navigate = useNavigate();  // Inicializa el hook para redirección
 
-    const handleSignIn = () => {
-        // Aquí puedes añadir cualquier lógica, como autenticación
-        // Luego redirige a la nueva vista
-        navigate("/other");  // Cambia "/other" a la ruta a la que quieras redirigir
-    };
+
     useEffect(() => {
-            fetch('http://localhost:8000/api/v1/proceso/', {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Token cfc8340bc8d44383934ef380d4a9f71c26305ad6',
-                    'Content-Type': 'application/json',
-                },
+        fetch('http://localhost:8000/api/v1/proceso/', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Token cfc8340bc8d44383934ef380d4a9f71c26305ad6',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la respuesta del servidor');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setProcesses(data.results);
-                    setLoading(false);
-                    console.log(processes)
-                })
-                .catch(error => {
-                    setError(error.message);
-                    setLoading(false);
-                });
-        }, []);
+            .then(data => {
+                setProcesses(data.results);
+                setLoading(false);
+                console.log(processes)
+            })
+            .catch(error => {
+                setError(error.message);
+                setLoading(false);
+            });
+    }, []);
 
     const columns = [
         {name: "ID", uid: "id"},
@@ -68,7 +64,8 @@ function Proceso() {
             case "description":
                 return item.descripcion;
             case "actions":
-                return <Button color="secondary" >Ver</Button>;
+                return <Button color="secondary" onPress={() => navigate(`/PanelProcess`)}>Ver</Button>;
+            //return <Button color="secondary" onPress={() => navigate(`/PanelProcess/${item.id}`)}>Ver</Button>;
             default:
                 return null;
         }
@@ -80,7 +77,7 @@ function Proceso() {
             <div className="flex flex-col gap-4 mb-4">
                 <div className="flex justify-between gap-3 items-end">
                     <h1 className="pro-text">Procesos</h1>
-                    <Button color="secondary" endContent={<Plus />} onPress={() => setModalOpen(true)}>
+                    <Button color="secondary" endContent={<Plus/>} onPress={() => setModalOpen(true)}>
                         Nuevo
                     </Button>
                 </div>
@@ -99,22 +96,29 @@ function Proceso() {
     return (
         <div>
             {topContent}
-                <Table aria-label="Tabla de Procesos">
-                    <TableHeader columns={columns}>
-                        {(column) => (
-                            <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
-                                {column.name}
-                            </TableColumn>
-                        )}
-                    </TableHeader>
-                    <TableBody items={processes}>
-                        {(item) => (
-                            <TableRow key={item.id}>
-                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+            <Card>
+                <CardBody>
+                    <Table aria-label="Tabla de Procesos">
+                        <TableHeader columns={columns}>
+                            {(column) => (
+                                <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+                                    {column.name}
+                                </TableColumn>
+                            )}
+                        </TableHeader>
+                        <TableBody items={processes}>
+                            {(item) => (
+                                <TableRow key={item.id}>
+                                    {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                    <div className="flex w-full justify-center mt-4">
+                        <Pagination isCompact showControls showShadow color="secondary" page={1} total={10}/>
+                    </div>
+                </CardBody>
+            </Card>
             <AddProceso
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}
@@ -124,4 +128,5 @@ function Proceso() {
         </div>
     );
 }
+
 export default Proceso;
