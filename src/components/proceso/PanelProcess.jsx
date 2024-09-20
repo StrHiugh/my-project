@@ -71,7 +71,7 @@ export default function PanelProcess() {
 
         <div>
             <Breadcrumbs variant="solid">
-                <BreadcrumbItem>Proceso</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
                 <BreadcrumbItem>Panel Proceso</BreadcrumbItem>
             </Breadcrumbs>
             {topContent}

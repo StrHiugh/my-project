@@ -12,9 +12,10 @@ import {
 } from "@nextui-org/react";
 import React, {useMemo} from "react";
 import {Blocks, Plus} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 
 export default function PanelEtapa() {
-
+    const navigate = useNavigate();  // Inicializa el hook para redirección
     const columns = [
         {name: "ID", uid: "id"},
         {name: "Nombre", uid: "name"},
@@ -91,8 +92,8 @@ export default function PanelEtapa() {
     return (
         <div>
             <Breadcrumbs variant="solid">
-                <BreadcrumbItem>Proceso</BreadcrumbItem>
-                <BreadcrumbItem>Panel Proceso</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(`/PanelProcess`)}>Panel Proceso</BreadcrumbItem>
                 <BreadcrumbItem>Panel Etapa</BreadcrumbItem>
             </Breadcrumbs>
             {topContent}
