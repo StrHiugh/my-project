@@ -13,6 +13,8 @@ import {
 import React, {useMemo} from "react";
 import {Blocks, Plus} from "lucide-react";
 import {useNavigate} from "react-router-dom";
+import GaugeRadial from "../charts/GaugeRadial.jsx";
+import AreaGraphic from "../charts/AreaGraphic.jsx";
 
 export default function PanelEtapa() {
     const navigate = useNavigate();  // Inicializa el hook para redirección
@@ -134,11 +136,23 @@ export default function PanelEtapa() {
                     <Tab key="graphics" title="Gráficas">
                         <Card>
                         <CardBody>
-                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                commodo
-                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                                eu
-                                fugiat nulla pariatur.
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                                <div>
+                                    <GaugeRadial labels="pH" series={47.5} labelColor='#7827c8' />
+                                    <Button color="secondary">
+                                        Recargar Datos
+                                    </Button>
+                                </div>
+                                <div>
+                                    <GaugeRadial labels="Oxigeno Disuelto" series={52.5} labelColor='#7827c8' />
+                                    <Button color="secondary">
+                                        Recargar Datos
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="mt-16">
+                                <AreaGraphic></AreaGraphic>
+                            </div>
                             </CardBody>
                         </Card>
                     </Tab>
