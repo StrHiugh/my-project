@@ -10,15 +10,22 @@ import {
     Table,
     TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination
 } from "@nextui-org/react";
-import React, {useMemo} from "react";
+import React, {useEffect, useMemo} from "react";
 import {Blocks, Plus} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import GaugeRadial from "../charts/GaugeRadial.jsx";
 import AreaGraphic from "../charts/AreaGraphic.jsx";
 
 
 export default function PanelEtapa() {
     const navigate = useNavigate();  // Inicializa el hook para redirección
+    const { id, fkequipo } = useParams();
+
+    useEffect(() => {
+        console.log(`ID: ${id}`);
+        console.log(`fkequipo: ${fkequipo}`);
+    }, [id, fkequipo]);
+
 
     const columns = [
         {name: "ID", uid: "id"},
