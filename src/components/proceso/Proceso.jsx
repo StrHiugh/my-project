@@ -40,7 +40,6 @@ function Proceso() {
             .then(data => {
                 setProcesses(data.results);
                 setLoading(false);
-                console.log(processes)
             })
             .catch(error => {
                 setError(error.message);
@@ -64,8 +63,7 @@ function Proceso() {
             case "description":
                 return item.descripcion;
             case "actions":
-                return <Button color="secondary" onPress={() => navigate(`/PanelProcess`)}>Ver</Button>;
-            //return <Button color="secondary" onPress={() => navigate(`/PanelProcess/${item.id}`)}>Ver</Button>;
+                return <Button color="secondary" onPress={() => navigate(`/PanelProcess/${item.id}`)}>Ver</Button>;
             default:
                 return null;
         }
@@ -92,7 +90,6 @@ function Proceso() {
     if (error) {
         return <div>Error: {error}</div>;
     }
-    console.log(processes);
     return (
         <div>
             {topContent}

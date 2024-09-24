@@ -18,6 +18,7 @@ import AreaGraphic from "../charts/AreaGraphic.jsx";
 
 export default function PanelEtapa() {
     const navigate = useNavigate();  // Inicializa el hook para redirección
+
     const columns = [
         {name: "ID", uid: "id"},
         {name: "Nombre", uid: "name"},

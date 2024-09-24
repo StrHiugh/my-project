@@ -30,8 +30,8 @@ function App() {
                     <section className="p-10 mt-10">
                         <Routes>
                             <Route path="/" element={<Proceso />} /> {/* Vista por defecto */}
-                            <Route path="/PanelProcess" element={<PanelProcess />} /> {/* Vista de PanelProcess */}
-                            <Route path="/PanelEtapa" element={<PanelEtapa />} /> {/* Vista de PanelProcess */}
+                            <Route path="/PanelProcess/:fkProcesoId" element={<PanelProcess />} />
+                            <Route path="/PanelEtapa/:id/:fkequipo" element={<PanelEtapa />} /> {/* Vista de paneletapa */}
                         </Routes>
                     </section>
                 </div>
