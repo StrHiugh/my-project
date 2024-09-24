@@ -16,6 +16,7 @@ import {useNavigate} from "react-router-dom";
 import GaugeRadial from "../charts/GaugeRadial.jsx";
 import AreaGraphic from "../charts/AreaGraphic.jsx";
 
+
 export default function PanelEtapa() {
     const navigate = useNavigate();  // Inicializa el hook para redirección
 

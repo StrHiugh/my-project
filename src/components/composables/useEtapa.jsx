@@ -1,0 +1,84 @@
+import { useState, useEffect } from 'react';
+
+export const useEtapa = () => {
+    const [etapaData, setEtapaData] = useState(null);
+    const [etapaDetail, setEtapaDetail] = useState(null);  // Para almacenar los datos de fetchEtapaid
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Función para obtener etapas por fkProcesoId
+    async function fetchEtapa(fkProcesoId) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/?fkProceso=${fkProcesoId}`, {
+                headers: {
+                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Error al consumir la API");
+            }
+
+            const data = await response.json();
+            setEtapaData(data.results);
+            return data.results;
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // Función para obtener etapa específica por id
+    async function fetchEtapaid(id) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/?id=${id}`, {
+                headers: {
+                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al consumir la API');
+            }
+
+            const data = await response.json();
+            if (!data || data.results.length === 0) {
+                throw new Error('No se encontraron datos en la respuesta');
+            }
+
+            const etapa = data.results[0];
+
+            const etapaPrincipal = {
+                id: etapa.id,
+                nombre: etapa.nombre,
+                activo: etapa.activo,
+                duracion: etapa.duracion,
+                created_at: etapa.created_at,
+                createdTime_at: etapa.createdTime_at,
+                updated_at: etapa.updated_at,
+            };
+
+            const fkProceso = etapa.fkProceso;
+
+            console.log('Objeto Principal:', etapaPrincipal);
+            console.log('Objeto fkProceso:', fkProceso);
+
+            setEtapaDetail({ etapaPrincipal, fkProceso });
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // Retornar ambas funciones y los estados relevantes
+    return {
+        fetchEtapa,
+        //fetchEtapaid,
+        etapaData,
+        etapaDetail,
+        loading,
+        error
+    };
+};

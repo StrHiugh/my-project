@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     BreadcrumbItem,
     Breadcrumbs,
@@ -16,52 +16,33 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {Plus} from "lucide-react";
 import AddProceso from "./AddProceso.jsx";
 import "./PanelProcess.css"
+import {useEtapa} from "../composables/useEtapa.jsx";
 
 export default function PanelProcess() {
-    const navigate = useNavigate();  // Inicializa el hook para redirección
+    const navigate = useNavigate();
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalBackdrop, setModalBackdrop] = useState('blur');
-    const { fkProcesoId } = useParams();  // Obtén el id del proceso de la URL
+    const { fkProcesoId } = useParams();
     const [etapas, setEtapas] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    const fetchEtapa = async (fkProcesoId) => {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/?fkProceso=${fkProcesoId}`, {
-                headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error("Error al consumir la API");
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error(error);
-            throw new Error("Error al obtener las etapas");
-        }
-    };
+    const { fetchEtapa, loading, error } = useEtapa();
 
     useEffect(() => {
-        if (fkProcesoId) {  // Solo hacer fetch si fkProcesoId está definido
-            setLoading(true);
+        if (fkProcesoId) {
+            // Llama a la función y maneja la respuesta
             fetchEtapa(fkProcesoId)
-                .then(data => {
-                    setEtapas(data.results);  // Asegúrate de que data.results contenga lo que esperas
-                    setLoading(false);
+                .then((data) => {
+                    if (data && Array.isArray(data)) {
+                        setEtapas(data);  // Almacena los datos obtenidos
+                    } else {
+                        console.error("Los datos obtenidos no son un array válido:", data);
+                    }
                 })
-                .catch(err => {
-                    setError(err.message);
-                    setLoading(false);
+                .catch((error) => {
+                    console.error("Error al obtener los datos de etapa:", error);
                 });
-        } else {
-            setError("No se proporcionó un ID de proceso válido");
         }
     }, [fkProcesoId]);
+
 
     console.log(etapas);
     const columns = [
@@ -89,20 +70,17 @@ export default function PanelProcess() {
         }
     };
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const topContent = useMemo(() => {
-        return (
-            <div className="flex flex-col gap-4 mb-4">
-                <div className="flex justify-between gap-3 items-end">
-                    <h1 className="pro-text">Panel Procesos</h1>
+    const topContent = (
+        <div className="flex flex-col gap-4 mb-4">
+            <div className="flex justify-between gap-3 items-end">
+                <h1 className="pro-text">Panel Procesos</h1>
 
-                    <Button color="secondary" endContent={<Plus/>} onPress={() => setModalOpen(true)}>
-                        Nueva Etapa
-                    </Button>
-                </div>
+                <Button color="secondary" endContent={<Plus/>} onPress={() => setModalOpen(true)}>
+                    Nueva Etapa
+                </Button>
             </div>
-        );
-    }, []);
+        </div>
+    );
 
     return (
 
