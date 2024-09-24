@@ -31,7 +31,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Proceso />} /> {/* Vista por defecto */}
                             <Route path="/PanelProcess/:fkProcesoId" element={<PanelProcess />} />
-                            <Route path="/PanelEtapa/:id/:fkequipo" element={<PanelEtapa />} /> {/* Vista de paneletapa */}
+                            <Route path="/PanelEtapa/:fkEtapaId" element={<PanelEtapa />} /> {/* Vista de paneletapa */}
                         </Routes>
                     </section>
                 </div>

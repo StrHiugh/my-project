@@ -64,7 +64,7 @@ export default function PanelProcess() {
             case "duration":
                 return item.duracion;
             case "actions":
-                return <Button color="secondary" onPress={() => navigate(`/PanelEtapa/${item.id}/${item.fkProceso.fkequipo}`)}>Entrar</Button>;
+                return <Button color="secondary" onPress={() => navigate(`/PanelEtapa/${item.id}`)}>Entrar</Button>;
             default:
                 return null;
         }
