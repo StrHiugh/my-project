@@ -26,21 +26,24 @@ export default function PanelProcess() {
     const [etapas, setEtapas] = useState([]);
     const { fetchEtapa, loading, error } = useEtapa();
 
-    useEffect(() => {
-        if (fkProcesoId) {
-            // Llama a la función y maneja la respuesta
-            fetchEtapa(fkProcesoId)
-                .then((data) => {
-                    if (data && Array.isArray(data)) {
-                        setEtapas(data);  // Almacena los datos obtenidos
-                    } else {
-                        console.error("Los datos obtenidos no son un array válido:", data);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error al obtener los datos de etapa:", error);
-                });
+    // Encapsulamos la lógica en una función
+    const obtenerDatosProcess = async () => {
+        if (!fkProcesoId) return;
+        try {
+            const data = await fetchEtapa(fkProcesoId);
+            if (data && Array.isArray(data)) {
+                setEtapas(data);  // Almacena los datos obtenidos
+            } else {
+                console.error("Los datos obtenidos no son un array válido:", data);
+            }
+        } catch (error) {
+            console.error("Error al obtener los datos de etapa:", error);
         }
+    };
+
+    // useEffect que solo llama a la función encapsulada cuando cambia fkProcesoId
+    useEffect(() => {
+        obtenerDatosProcess();
     }, [fkProcesoId]);
 
 

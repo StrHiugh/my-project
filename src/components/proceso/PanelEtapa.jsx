@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import { Tabs, Tab, Card, CardBody, Button, BreadcrumbItem, Breadcrumbs, CardHeader, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@nextui-org/react";
 import { useNavigate, useParams } from "react-router-dom";
 import {Blocks,} from "lucide-react";
@@ -12,70 +12,61 @@ import {useLecturaEtapa} from "../composables/useLecturaEtapa.jsx";
 export default function PanelEtapa() {
     const navigate = useNavigate();
     const { fkEtapaId } = useParams();
-    const [equipoDatas, setEquipoData] = useState([]); // Array vacío como valor inicial
-    const [fkequipo, setFkequipo] = useState(null); // Guarda el fkequipo aquí
+    const [lecturaDatas, setLecturaData] = useState([]);
+    const [fkequipo, setFkequipo] = useState(null);
     const { fetchEtapaId } = useEtapa();
-    const { equipoData} = useSeccionEquipo(fkequipo); // Hook para equipos
-    const { data, error, fetchLectura } = useLecturaEtapa();
+    const { equipoData} = useSeccionEquipo(fkequipo);
+    const {fetchLectura } = useLecturaEtapa();
 
-    useEffect(() => {
-        if (fkEtapaId) {
-            console.log("fkEtapaId:", fkEtapaId); // Verifica que el ID de la etapa se reciba correctamente
-            // Llama a la función para obtener los datos de la etapa
-            fetchEtapaId(fkEtapaId)
-                .then(({ etapaData, fkequipo }) => { // Desestructura el retorno                    console.log(data)
-                    console.log("Datos de etapa:", equipoDatas);
-                    console.log("ID de equipo:", fkequipo); // Log del fkequipo
-                    setEquipoData(equipoData);
-                    // Establece el fkequipo para que useSeccionEquipo pueda hacer la solicitud
-                    if (fkequipo) {
-                        setFkequipo(fkequipo);
-                    }
+    // Función para obtener los datos de la etapa
+    const obtenerDatosEtapa = async () => {
+        if (!fkEtapaId) return; // Evita la llamada si fkEtapaId es null o undefined
+        try {
+            const {fkequipo } = await fetchEtapaId(fkEtapaId);
+            console.log("ID de equipo:", fkequipo);
 
-                })
-                .catch((error) => {
-                    console.error("Error al obtener los datos de etapa:", error);
-                });
+            if (fkequipo) {
+                setFkequipo(fkequipo); // Establece el fkequipo
+            }
+        } catch (error) {
+            console.error("Error al obtener los datos de etapa:", error);
         }
-    }, [fkEtapaId, fetchEtapaId]);
+    };
+
+    // Función para obtener las lecturas de la API
+    const obtenerLecturas = async () => {
+        if (!fkEtapaId) return; // Evita la llamada si fkEtapaId es null o undefined
+        try {
+            const data = await fetchLectura(fkEtapaId);
+            console.log("Datos de la API:", data);
+
+            if (data) {
+                setLecturaData(data);
+                console.log(lecturaDatas)
+            }
+
+        } catch (error) {
+            console.error("Error al consumir la API:", error);
+        }
+    };
 
     useEffect(() => {
-        // Llama a la función fetchLectura con la etapa que deseas
-        fetchLectura(fkEtapaId)
-            .then((data) => {
-                console.log("Datos de la API:", data);
-            })
-            .catch((error) => {
-                console.error("Error al consumir la API:", error);
-            });
-    }, [fetchLectura]);
+        obtenerDatosEtapa();
+    }, [fkEtapaId]);
+    useEffect(() => {
+        obtenerLecturas();
+    }, [fkEtapaId]);
 
 
-    const columns = [
-        {name: "ID", uid: "id"},
-        {name: "Nombre", uid: "name"},
-        {name: "Equipo", uid: "equip"},
-        {name: "Acciones", uid: "actions"},
-
-    ];
-
-    const columnsLecturas = [
-        {name: "ID", uid: "id"},
-        {name: "Valor", uid: "value"},
-        {name: "Sensor", uid: "sensor"},
-    ];
 
 
-    const processesLecturas = [         // datos de ejemplo
-        {id: 1, value: 5.9, sensor: "oxigeno"},
-        {id: 2, value: 6.0, sensor: "ph"},
-        {id: 3, value: 6.0, sensor: "temperatura"},
-        {id: 4, value: 6.0, sensor: "oxigeno"},
-        {id: 5, value: 6.2, sensor: "ph"},
-        {id: 6, value: 6.0, sensor: "oxigeno"},
-        {id: 7, value: 5.9, sensor: "ph"},
+        const columns = [
+            {name: "ID", uid: "id"},
+            {name: "Nombre", uid: "name"},
+            {name: "Equipo", uid: "equip"},
+            {name: "Acciones", uid: "actions"},
 
-    ];
+        ];
 
     const renderCell = (item, columnKey) => {
         switch (columnKey) {
@@ -92,17 +83,54 @@ export default function PanelEtapa() {
         }
     };
 
-    const renderCellLecturas = (item, columnKey2) => {
-        switch (columnKey2) {
+    //paginacion
+    const columnsLecturas = [
+        { name: "ID", uid: "id" },
+        { name: "Valor", uid: "value" },
+        { name: "Sensor", uid: "sensor" },
+    ];
+
+    const renderCellLecturas = (item, columnKey) => {
+        switch (columnKey) {
             case "id":
                 return item.id;
             case "value":
-                return item.value;
+                return item.valor;
             case "sensor":
-                return item.sensor;
+                return item.fkESeccionEquipoSensor.fkseccionEquipo_nombre;
             default:
                 return null;
         }
+    };
+
+    // Paginación para lecturas
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; // Elementos por página
+
+    const totalPages = Math.ceil((lecturaDatas?.length || 0) / itemsPerPage);
+
+    const paginatedData = lecturaDatas.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    // Paginación para equipo
+    const [currentPageEquipo, setCurrentPageEquipo] = useState(1);
+    const itemsPerPageEquipo = 10;
+
+    const totalPagesEquipo = Math.ceil((equipoData?.length || 0) / itemsPerPageEquipo);
+
+    const paginatedEquipoData = (equipoData || []).slice(
+        (currentPageEquipo - 1) * itemsPerPageEquipo,
+        currentPageEquipo * itemsPerPageEquipo
+    );
+
+    const handlePageChangeEquipo = (page) => {
+        setCurrentPageEquipo(page);
     };
 
     const topContent = useMemo(() => {
@@ -143,7 +171,7 @@ export default function PanelEtapa() {
                                             </TableColumn>
                                         )}
                                     </TableHeader>
-                                    <TableBody items={Array.isArray(equipoData) ? equipoData : []}>
+                                    <TableBody items={Array.isArray(paginatedEquipoData) ? paginatedEquipoData : []}>
                                         {(item) => (
                                             <TableRow key={item.id}>
                                                 {(columnKey) =>
@@ -153,22 +181,35 @@ export default function PanelEtapa() {
                                     </TableBody>
                                 </Table>
                                 <div className="flex w-full justify-center mt-4">
-                                    <Pagination isCompact showControls showShadow color="secondary" page={1}
-                                                total={10}/>
+                                    <Pagination
+                                        isCompact
+                                        showControls
+                                        showShadow
+                                        color="secondary"
+                                        page={currentPageEquipo}
+                                        total={totalPagesEquipo}
+                                        onChange={handlePageChangeEquipo}
+                                    />
                                 </div>
                             </CardBody>
 
                         </Card>
                     </Tab>
 
+
                     <Tab key="graphics" title="Gráficas">
                         <Card>
-                        <CardBody>
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
-                                <div>
-                                    <GaugeRadial labels="pH" series={47.5} labelColor='#7827c8' />
-                                    <Button color="secondary">
-                                        Recargar Datos
+                            <CardBody>
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: '20px'
+                                }}>
+                                    <div>
+                                        <GaugeRadial labels="pH" series={47.5} labelColor='#7827c8'/>
+                                        <Button color="secondary">
+                                            Recargar Datos
                                     </Button>
                                 </div>
                                 <div>
@@ -179,11 +220,13 @@ export default function PanelEtapa() {
                                 </div>
                             </div>
                             <div className="mt-16">
-                                <AreaGraphic></AreaGraphic>
+                                <AreaGraphic lecturaDatas={lecturaDatas} />
                             </div>
                             </CardBody>
                         </Card>
                     </Tab>
+
+
                     <Tab key="data" title="Lecturas">
                         <Card>
                             <CardHeader>
@@ -198,7 +241,7 @@ export default function PanelEtapa() {
                                             </TableColumn>
                                         )}
                                     </TableHeader>
-                                    <TableBody items={processesLecturas}>
+                                    <TableBody items={Array.isArray(paginatedData) ? paginatedData: []}>
                                         {(item) => (
                                             <TableRow key={item.id}>
                                                 {(columnKey) =>
@@ -208,8 +251,14 @@ export default function PanelEtapa() {
                                     </TableBody>
                                 </Table>
                                 <div className="flex w-full justify-center mt-4">
-                                    <Pagination isCompact showControls showShadow color="secondary" page={1}
-                                                total={10}/>
+                                    <Pagination
+                                        isCompact
+                                        showControls
+                                        showShadow
+                                        color="secondary"
+                                        page={currentPage}
+                                        total={totalPages}
+                                        onChange={handlePageChange}/>
                                 </div>
                             </CardBody>
 

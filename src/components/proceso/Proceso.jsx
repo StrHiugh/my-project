@@ -11,8 +11,7 @@ import {
 import {Plus,} from "lucide-react";
 import "./Proceso.css"
 import AddProceso from "./AddProceso";
-
-import {useNavigate} from 'react-router-dom';  // Hook para la redirección
+import {useNavigate} from 'react-router-dom';
 
 function Proceso() {
     const [processes, setProcesses] = useState([]);
@@ -20,7 +19,7 @@ function Proceso() {
     const [error, setError] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalBackdrop, setModalBackdrop] = useState('blur');
-    const navigate = useNavigate();  // Inicializa el hook para redirección
+    const navigate = useNavigate();
 
 
     useEffect(() => {

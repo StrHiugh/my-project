@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 // Hook personalizado para obtener lecturas de etapa
 export function useLecturaEtapa() {
-    const [error, setError] = useState(null); // Para manejar errores
-    const [data, setData] = useState(null);   // Para almacenar los datos obtenidos
-    const token = 'cfc8340bc8d44383934ef380d4a9f71c26305ad6'; // Reemplaza con el token que mencionaste
+    const [error, setError] = useState(null);
+    const [data, setData] = useState(null);
+    const token = 'cfc8340bc8d44383934ef380d4a9f71c26305ad6';
 
     // Función para obtener las lecturas por etapa
     async function fetchLectura(fkEtapaId) {
@@ -12,7 +12,7 @@ export function useLecturaEtapa() {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/lectura/?fkEtapa=${fkEtapaId}`, {
                 method: 'GET',
                 headers: {
-                    Authorization: `Token ${token}`,  // Autenticación con el token proporcionado
+                    Authorization: `Token ${token}`,
                 }
             });
 
@@ -21,10 +21,10 @@ export function useLecturaEtapa() {
             }
 
             const data = await response.json();
-            setData(data.results);  // Actualiza los datos obtenidos
-            return data;
+            setData(data.results);
+            return data.results;
         } catch (err) {
-            setError(err.message);  // Captura el error
+            setError(err.message);
             throw new Error(err.message);
         }
     }
@@ -32,10 +32,10 @@ export function useLecturaEtapa() {
     // Función para obtener lecturas de un equipo específico
     async function fetchLecturaEquipo(fkEtapaId, fkESeccionEquipoSensor) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/lectura/?fkEtapa=${etapa}&fkESeccionEquipoSensor=${fkESeccionEquipoSensor}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/lectura/?fkEtapa=${fkEtapaId}&fkESeccionEquipoSensor=${fkESeccionEquipoSensor}`, {
                 method: 'GET',
                 headers: {
-                    Authorization: `Token ${token}`,  // Autenticación con el token proporcionado
+                    Authorization: `Token ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
