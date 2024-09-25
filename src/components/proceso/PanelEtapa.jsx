@@ -7,7 +7,7 @@ import { useEtapa } from "../composables/useEtapa.jsx";
 import { useSeccionEquipo } from "../composables/useEquipoSeccion.jsx";
 import GaugeRadial from "../charts/GaugeRadial.jsx";
 import AreaGraphic from "../charts/AreaGraphic.jsx";
-
+import {useLecturaEtapa} from "../composables/useLecturaEtapa.jsx";
 
 export default function PanelEtapa() {
     const navigate = useNavigate();
@@ -16,6 +16,7 @@ export default function PanelEtapa() {
     const [fkequipo, setFkequipo] = useState(null); // Guarda el fkequipo aquí
     const { fetchEtapaId } = useEtapa();
     const { equipoData} = useSeccionEquipo(fkequipo); // Hook para equipos
+    const { data, error, fetchLectura } = useLecturaEtapa();
 
     useEffect(() => {
         if (fkEtapaId) {
@@ -38,6 +39,16 @@ export default function PanelEtapa() {
         }
     }, [fkEtapaId, fetchEtapaId]);
 
+    useEffect(() => {
+        // Llama a la función fetchLectura con la etapa que deseas
+        fetchLectura(fkEtapaId)
+            .then((data) => {
+                console.log("Datos de la API:", data);
+            })
+            .catch((error) => {
+                console.error("Error al consumir la API:", error);
+            });
+    }, [fetchLectura]);
 
 
     const columns = [
@@ -75,7 +86,7 @@ export default function PanelEtapa() {
             case "equip":
                 return item.fkequipo_nombre;
             case "actions":
-                return <Button color="secondary">Sensores</Button>;
+                return <Button color="secondary" >Sensores</Button>;
             default:
                 return null;
         }
