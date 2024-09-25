@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-
+import {useSeccionEquipo} from "./useEquipoSeccion.jsx";
 export const useEtapa = () => {
     const [etapaData, setEtapaData] = useState(null);
+    const [etapaFkProceso, setFkProceso] = useState(null);
     const [etapaDetail, setEtapaDetail] = useState(null);  // Para almacenar los datos de fetchEtapaid
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -21,7 +22,7 @@ export const useEtapa = () => {
 
             const data = await response.json();
             setEtapaData(data.results);
-            return data.results;
+            return data.results; // Devuelve solo las etapas si no hay fkequipo
         } catch (err) {
             setError(err.message);
         } finally {
@@ -29,10 +30,11 @@ export const useEtapa = () => {
         }
     }
 
+
     // Función para obtener etapa específica por id
-    async function fetchEtapaid(id) {
+    async function fetchEtapaId(fkEtapaId) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/?id=${id}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/?id=${fkEtapaId}`, {
                 headers: {
                     Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
                 },
@@ -43,6 +45,8 @@ export const useEtapa = () => {
             }
 
             const data = await response.json();
+            console.log("Respuesta de la API:", data); // Verifica la respuesta aquí
+
             if (!data || data.results.length === 0) {
                 throw new Error('No se encontraron datos en la respuesta');
             }
@@ -62,10 +66,13 @@ export const useEtapa = () => {
             const fkProceso = etapa.fkProceso;
 
             console.log('Objeto Principal:', etapaPrincipal);
-            console.log('Objeto fkProceso:', fkProceso);
-
-            setEtapaDetail({ etapaPrincipal, fkProceso });
-        } catch (err) {
+            console.log('Objeto fkProceso:', fkProceso.fkequipo);
+            const fkequipo = fkProceso?.fkequipo; // Obtén fkequipo del fkProceso
+            if (fkequipo) {
+                // Aquí se debería ejecutar fetchSeccionEquipo directamente
+                return { etapaData: etapaPrincipal, fkequipo }; // Retorna la etapa y el fkequipo
+            }
+            return { etapaData: etapaPrincipal, fkequipo: null };         } catch (err) {
             setError(err.message);
         } finally {
             setLoading(false);
@@ -75,9 +82,9 @@ export const useEtapa = () => {
     // Retornar ambas funciones y los estados relevantes
     return {
         fetchEtapa,
-        //fetchEtapaid,
+        fetchEtapaId,
+        setEtapaDetail,
         etapaData,
-        etapaDetail,
         loading,
         error
     };

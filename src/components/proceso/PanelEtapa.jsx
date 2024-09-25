@@ -1,30 +1,43 @@
-import {
-    Tabs,
-    Tab,
-    Card,
-    CardBody,
-    Button,
-    BreadcrumbItem,
-    Breadcrumbs,
-    CardHeader,
-    Table,
-    TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination
-} from "@nextui-org/react";
-import React, {useEffect, useMemo} from "react";
-import {Blocks, Plus} from "lucide-react";
-import {useNavigate, useParams} from "react-router-dom";
+import React, {useEffect, useMemo, useState} from "react";
+import { Tabs, Tab, Card, CardBody, Button, BreadcrumbItem, Breadcrumbs, CardHeader, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@nextui-org/react";
+import { useNavigate, useParams } from "react-router-dom";
+import {Blocks,} from "lucide-react";
+
+import { useEtapa } from "../composables/useEtapa.jsx";
+import { useSeccionEquipo } from "../composables/useEquipoSeccion.jsx";
 import GaugeRadial from "../charts/GaugeRadial.jsx";
 import AreaGraphic from "../charts/AreaGraphic.jsx";
 
 
 export default function PanelEtapa() {
-    const navigate = useNavigate();  // Inicializa el hook para redirección
-    const { id, fkequipo } = useParams();
+    const navigate = useNavigate();
+    const { fkEtapaId } = useParams();
+    const [equipoDatas, setEquipoData] = useState([]); // Array vacío como valor inicial
+    const [fkequipo, setFkequipo] = useState(null); // Guarda el fkequipo aquí
+    const { fetchEtapaId } = useEtapa();
+    const { equipoData} = useSeccionEquipo(fkequipo); // Hook para equipos
 
     useEffect(() => {
-        console.log(`ID: ${id}`);
-        console.log(`fkequipo: ${fkequipo}`);
-    }, [id, fkequipo]);
+        if (fkEtapaId) {
+            console.log("fkEtapaId:", fkEtapaId); // Verifica que el ID de la etapa se reciba correctamente
+            // Llama a la función para obtener los datos de la etapa
+            fetchEtapaId(fkEtapaId)
+                .then(({ etapaData, fkequipo }) => { // Desestructura el retorno                    console.log(data)
+                    console.log("Datos de etapa:", equipoDatas);
+                    console.log("ID de equipo:", fkequipo); // Log del fkequipo
+                    setEquipoData(equipoData);
+                    // Establece el fkequipo para que useSeccionEquipo pueda hacer la solicitud
+                    if (fkequipo) {
+                        setFkequipo(fkequipo);
+                    }
+
+                })
+                .catch((error) => {
+                    console.error("Error al obtener los datos de etapa:", error);
+                });
+        }
+    }, [fkEtapaId, fetchEtapaId]);
+
 
 
     const columns = [
@@ -40,12 +53,7 @@ export default function PanelEtapa() {
         {name: "Valor", uid: "value"},
         {name: "Sensor", uid: "sensor"},
     ];
-    const processes = [         // datos de ejemplo
-        {id: 1, name: "Proceso 1", equip: "Sonda Multiparamétrica"},
-        {id: 2, name: "Proceso 2", equip: "Sonda Multiparamétrica"},
-        {id: 3, name: "Proceso 3", equip: "Sonda Multiparamétrica"},
-        {id: 4, name: "Proceso 4", equip: "Sonda Multiparamétrica"},
-    ];
+
 
     const processesLecturas = [         // datos de ejemplo
         {id: 1, value: 5.9, sensor: "oxigeno"},
@@ -63,9 +71,9 @@ export default function PanelEtapa() {
             case "id":
                 return item.id;
             case "name":
-                return item.name;
+                return item.nombre;
             case "equip":
-                return item.equip;
+                return item.fkequipo_nombre;
             case "actions":
                 return <Button color="secondary">Sensores</Button>;
             default:
@@ -92,7 +100,7 @@ export default function PanelEtapa() {
                 <div className="flex justify-between gap-3 items-end">
                     <h1 className="pro-text">Panel Etapa</h1>
 
-                    <Button color="secondary" endContent={<Blocks/>} onPress={() => setModalOpen(true)}>
+                    <Button color="secondary" endContent={<Blocks/>}>
                         Desactivar
                     </Button>
                 </div>
@@ -116,8 +124,7 @@ export default function PanelEtapa() {
                                 <h2 className="panel">Proceso Actual: Etapa 1</h2>
                             </CardHeader>
                             <CardBody>
-                                <Table aria-label="Tabla de Procesos"
-                                       className="w-full mx-auto"> {/* Ajusta el ancho aquí */}
+                                <Table aria-label="Tabla de Procesos">
                                     <TableHeader columns={columns}>
                                         {(column) => (
                                             <TableColumn key={column.uid}>
@@ -125,10 +132,11 @@ export default function PanelEtapa() {
                                             </TableColumn>
                                         )}
                                     </TableHeader>
-                                    <TableBody items={processes}>
+                                    <TableBody items={Array.isArray(equipoData) ? equipoData : []}>
                                         {(item) => (
                                             <TableRow key={item.id}>
-                                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                                {(columnKey) =>
+                                                    <TableCell>{renderCell(item, columnKey)}</TableCell>}
                                             </TableRow>
                                         )}
                                     </TableBody>
