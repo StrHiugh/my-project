@@ -22,12 +22,37 @@ export function useLecturaEtapa() {
 
             const data = await response.json();
             setData(data.results);
-            return data.results;
+
+            //obtener id del sensor
+            const groupedData = data.results.reduce((acc, item) => {
+                const sensorId = item.fkESeccionEquipoSensor.id; // Acceder al ID del sensor
+                if (!acc[sensorId]) {
+                    acc[sensorId] = [];
+                }
+                acc[sensorId].push(item); // Añadir el dato a la agrupación correspondiente
+                return acc;
+            }, {});
+
+            // Para cada sensorId encontrado en la agrupación, hacemos la petición
+            for (const sensorId in groupedData) {
+                if (Object.prototype.hasOwnProperty.call(groupedData, sensorId)) {
+                    console.log(`Realizando petición para sensorId: ${sensorId}`);
+
+                    // Ahora, haces la petición específica para este sensorId
+                    const sensorData = await fetchLecturaEquipo(fkEtapaId, sensorId);
+                    console.log(`Datos obtenidos para sensor ${sensorId}:`, sensorData);
+                }
+            }
+
+
+            return groupedData;
         } catch (err) {
             setError(err.message);
             throw new Error(err.message);
         }
     }
+
+
 
     // Función para obtener lecturas de un equipo específico
     async function fetchLecturaEquipo(fkEtapaId, fkESeccionEquipoSensor) {

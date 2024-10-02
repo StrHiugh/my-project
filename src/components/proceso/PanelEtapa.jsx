@@ -33,34 +33,53 @@ export default function PanelEtapa() {
         }
     };
 
-    // Función para obtener las lecturas de la API
-    const obtenerLecturas = async () => {
-        if (!fkEtapaId) return; // Evita la llamada si fkEtapaId es null o undefined
-        try {
-            const data = await fetchLectura(fkEtapaId);
-            console.log("Datos de la API:", data);
-
-            if (data) {
-                setLecturaData(data);
-                console.log(lecturaDatas)
-            }
-
-        } catch (error) {
-            console.error("Error al consumir la API:", error);
-        }
-    };
 
     useEffect(() => {
         obtenerDatosEtapa();
     }, [fkEtapaId]);
+    // Use efecto para cargar lecturas al obtener el ID de etapa
     useEffect(() => {
-        obtenerLecturas();
-    }, [fkEtapaId]);
+        if (fkEtapaId) {
+            (async () => {
+                const groupedData = await fetchLectura(fkEtapaId); // Llama a la función y obtiene los datos agrupados
+                if (groupedData) {
+                    setLecturaData(groupedData); // Establece los datos agrupados
+                    console.log("lectura data:",lecturaDatas)
+                }
+
+            })();
+        }
+    }, [fkEtapaId]); // No incluir fetchLectura como dependencia
 
 
 
 
-        const columns = [
+    // Aplana los datos de lecturaDatas en un solo array
+    const allLecturaData = Object.values(lecturaDatas).flat();
+
+    //ultimop dato para los gauges
+    const lastData = Object.entries(lecturaDatas).map(([sensorId, data]) => {
+        if (data.length > 0) {
+            return {
+                sensorId,
+                lastValue: data[data.length - 1].valor, // Cambia 'valor' por el nombre correcto de la propiedad
+            };
+        }
+        return { sensorId, lastValue: null }; // Maneja el caso de que no haya datos
+    });
+    console.log(lastData);
+
+    // Asumiendo que solo tienes dos sensores: pH y Oxígeno Disuelto
+    const phData = lastData.find(sensor => sensor.sensorId === '13'); // Cambia 'pH' según el ID de tu sensor
+    const oxigenoData = lastData.find(sensor => sensor.sensorId === '8'); // Cambia según el ID correcto
+    const tempData = lastData.find(sensor => sensor.sensorId === '9'); // Cambia según el ID correcto
+
+
+
+
+
+
+    const columns = [
             {name: "ID", uid: "id"},
             {name: "Nombre", uid: "name"},
             {name: "Equipo", uid: "equip"},
@@ -107,12 +126,13 @@ export default function PanelEtapa() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10; // Elementos por página
 
-    const totalPages = Math.ceil((lecturaDatas?.length || 0) / itemsPerPage);
+    const totalPages = Math.ceil((allLecturaData?.length || 0) / itemsPerPage);
 
-    const paginatedData = lecturaDatas.slice(
+    // Asegúrate de que lecturaDatas es un array
+    const paginatedData = Array.isArray(allLecturaData) ? allLecturaData.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
-    );
+    ) : [];
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -207,21 +227,48 @@ export default function PanelEtapa() {
                                     gap: '20px'
                                 }}>
                                     <div>
-                                        <GaugeRadial labels="pH" series={47.5} labelColor='#7827c8'/>
+                                        <GaugeRadial labels="pH"
+                                                     series={phData ? parseFloat(phData.lastValue) : 0}
+                                                     labelColor='#7827c8'
+                                                     sensorType="ph"
+
+                                        />
                                         <Button color="secondary">
                                             Recargar Datos
-                                    </Button>
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <GaugeRadial labels="Oxigeno Disuelto"
+                                                     series={oxigenoData ? parseFloat(oxigenoData.lastValue) : 0}
+                                                     labelColor='#7827c8'
+                                                     sensorType="oxygen"
+                                        />
+
+                                        <Button color="secondary">
+                                            Recargar Datos
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <GaugeRadial labels="Temperatura"
+                                                     series={tempData ? parseFloat(tempData.lastValue) : 0}
+                                                     labelColor='#7827c8'
+                                                     sensorType="temperature"
+                                        />
+                                        <Button color="secondary">
+                                            Recargar Datos
+                                        </Button>
+                                    </div>
+
+
                                 </div>
-                                <div>
-                                    <GaugeRadial labels="Oxigeno Disuelto" series={52.5} labelColor='#7827c8' />
-                                    <Button color="secondary">
-                                        Recargar Datos
-                                    </Button>
+                                <div className="mt-16">
+                                    {Object.entries(lecturaDatas).map(([sensorId, data]) => (
+                                        <AreaGraphic key={sensorId}
+                                                     lecturaDatas={data}
+                                                     sensorName={data[0]?.fkESeccionEquipoSensor?.fkseccionEquipo_nombre || "Sensor Desconocido"} // Extraer el nombre del sensor
+                                        />
+                                    ))}
                                 </div>
-                            </div>
-                            <div className="mt-16">
-                                <AreaGraphic lecturaDatas={lecturaDatas} />
-                            </div>
                             </CardBody>
                         </Card>
                     </Tab>
