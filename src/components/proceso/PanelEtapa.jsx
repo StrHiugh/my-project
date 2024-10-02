@@ -177,7 +177,7 @@ export default function PanelEtapa() {
             {topContent}
             <div>
                 <Tabs aria-label="Options" color="secondary">
-                    <Tab key="equipos" title="Sección Equipo">
+                    <Tab key="equipos" title="Sensores">
                         <Card>
                             <CardHeader>
                                 <h2 className="panel">Proceso Actual: Etapa 1</h2>

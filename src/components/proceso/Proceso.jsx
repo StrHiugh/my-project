@@ -21,6 +21,8 @@ function Proceso() {
     const [modalBackdrop, setModalBackdrop] = useState('blur');
     const navigate = useNavigate();
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage] = useState(10);
 
     useEffect(() => {
         fetch('http://localhost:8000/api/v1/proceso/', {
@@ -68,6 +70,12 @@ function Proceso() {
         }
     };
 
+    // Función para obtener los datos paginados
+    const paginatedData = () => {
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        return processes.slice(startIndex, endIndex);
+    };
 
     const topContent = useMemo(() => {
         return (
@@ -111,7 +119,15 @@ function Proceso() {
                         </TableBody>
                     </Table>
                     <div className="flex w-full justify-center mt-4">
-                        <Pagination isCompact showControls showShadow color="secondary" page={1} total={10}/>
+                        <Pagination
+                            isCompact
+                            showControls
+                            showShadow
+                            color="secondary"
+                            page={currentPage}
+                            total={Math.ceil(processes.length / rowsPerPage)}
+                            onChange={(page) => setCurrentPage(page)}
+                        />
                     </div>
                 </CardBody>
             </Card>

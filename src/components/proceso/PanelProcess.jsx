@@ -26,6 +26,12 @@ export default function PanelProcess() {
     const [etapas, setEtapas] = useState([]);
     const { fetchEtapa, loading, error } = useEtapa();
 
+    // Estado para la paginación
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
+
+
+
     // Encapsulamos la lógica en una función
     const obtenerDatosProcess = async () => {
         if (!fkProcesoId) return;
@@ -45,6 +51,8 @@ export default function PanelProcess() {
     useEffect(() => {
         obtenerDatosProcess();
     }, [fkProcesoId]);
+
+
 
 
     console.log(etapas);
@@ -71,6 +79,12 @@ export default function PanelProcess() {
             default:
                 return null;
         }
+    };
+    // Función para obtener los datos paginados
+    const paginatedData = () => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return etapas.slice(startIndex, endIndex);
     };
 
     const topContent = (
@@ -115,7 +129,15 @@ export default function PanelProcess() {
                         </TableBody>
                     </Table>
                     <div className="flex w-full justify-center mt-4">
-                        <Pagination isCompact showControls showShadow color="secondary" page={1} total={10}/>
+                        <Pagination
+                            isCompact
+                            showControls
+                            showShadow
+                            color="secondary"
+                            page={currentPage}
+                            total={Math.ceil(etapas.length / itemsPerPage)}
+                            onChange={(page) => setCurrentPage(page)}
+                        />
                     </div>
                 </CardBody>
             </Card>
