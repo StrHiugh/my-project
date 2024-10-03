@@ -1,4 +1,4 @@
 aside {
-    z-index: 1000; /* Asegúrate de que este valor sea mayor que el del Topbar */
+    z-index: 900; /* Asegúrate de que este valor sea mayor que el del Topbar */
 
 }

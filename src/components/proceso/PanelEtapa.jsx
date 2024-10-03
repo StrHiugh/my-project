@@ -18,6 +18,7 @@ export default function PanelEtapa() {
     const { equipoData} = useSeccionEquipo(fkequipo);
     const {fetchLectura } = useLecturaEtapa();
 
+
     // Función para obtener los datos de la etapa
     const obtenerDatosEtapa = async () => {
         if (!fkEtapaId) return; // Evita la llamada si fkEtapaId es null o undefined
@@ -37,6 +38,7 @@ export default function PanelEtapa() {
     useEffect(() => {
         obtenerDatosEtapa();
     }, [fkEtapaId]);
+
     // Use efecto para cargar lecturas al obtener el ID de etapa
     useEffect(() => {
         if (fkEtapaId) {
@@ -44,14 +46,14 @@ export default function PanelEtapa() {
                 const groupedData = await fetchLectura(fkEtapaId); // Llama a la función y obtiene los datos agrupados
                 if (groupedData) {
                     setLecturaData(groupedData); // Establece los datos agrupados
-                    console.log("lectura data:",lecturaDatas)
+
                 }
 
             })();
         }
     }, [fkEtapaId]); // No incluir fetchLectura como dependencia
 
-
+    console.log("lectura data:",lecturaDatas)
 
 
     // Aplana los datos de lecturaDatas en un solo array
@@ -171,7 +173,7 @@ export default function PanelEtapa() {
         <div>
             <Breadcrumbs variant="solid">
                 <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
-                <BreadcrumbItem onPress={() => navigate(`/PanelProcess`)}>Panel Proceso</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(-1)}>Panel Proceso</BreadcrumbItem>
                 <BreadcrumbItem>Panel Etapa</BreadcrumbItem>
             </Breadcrumbs>
             {topContent}

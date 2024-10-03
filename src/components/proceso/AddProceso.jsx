@@ -1,16 +1,18 @@
 // AddProceso.jsx
 import React from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link, Switch, TimeInput} from "@nextui-org/react";
 import {Lock, Mail} from "lucide-react";
-
+import "./AddProceso.css"
 export default function AddProceso({ isOpen, onClose, backdrop, setBackdrop }) {
     return (
         <Modal
-            size="3xl"
+            size="l"
             backdrop={backdrop}
             isOpen={isOpen}
             onClose={onClose}
             placement="top-center"
+            className="custom-modal" // Añadimos una clase personalizada
+
         >
             <ModalContent>
                 {(onClose) => (
@@ -19,37 +21,29 @@ export default function AddProceso({ isOpen, onClose, backdrop, setBackdrop }) {
                         <ModalBody>
                             <Input
                                 autoFocus
-                                endContent={
-                                    <Mail className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                                }
-                                label="Email"
-                                placeholder="Enter your email"
+                                label="Nombre"
+                                placeholder="Ingresa el nombre de la Etapa"
                                 variant="bordered"
                             />
-                            <Input
-                                endContent={
-                                    <Lock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                                }
-                                label="Password"
-                                placeholder="Enter your password"
-                                type="password"
-                                variant="bordered"
+
+                            <Switch defaultSelected color="secondary">
+                                Estado de la Etapa
+                            </Switch>
+
+                            <TimeInput
+                                label="Duracion"
+                                description="Duracion de la Etapa"
+                                hourCycle="24"
+                                granularity="second"
                             />
-                            <div className="flex py-2 px-1 justify-between">
-                                <Checkbox classNames={{ label: "text-small" }}>
-                                    Remember me
-                                </Checkbox>
-                                <Link color="secondary" href="#" size="sm">
-                                    Forgot password?
-                                </Link>
-                            </div>
+
                         </ModalBody>
                         <ModalFooter>
                             <Button color="danger" variant="flat" onPress={onClose}>
-                                Close
+                                Cerrar
                             </Button>
                             <Button color="secondary" onPress={onClose}>
-                                Sign in
+                                Agregar Etapa
                             </Button>
                         </ModalFooter>
                     </>
