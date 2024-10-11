@@ -64,7 +64,7 @@ function Proceso() {
             case "description":
                 return item.descripcion;
             case "actions":
-                return <Button color="secondary" onPress={() => navigate(`/PanelProcess/${item.id}`)}>Ver</Button>;
+                return <Button color="secondary" onPress={() => navigate(`/PanelProcess/${item.id}`, { state: { nombre: item.nombre } })}>Ver</Button>;
             default:
                 return null;
         }

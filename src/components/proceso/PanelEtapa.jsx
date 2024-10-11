@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useMemo, useState} from "react";
 import { Tabs, Tab, Card, CardBody, Button, BreadcrumbItem, Breadcrumbs, CardHeader, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@nextui-org/react";
 import { useNavigate, useParams } from "react-router-dom";
 import {Blocks,} from "lucide-react";
-
 import { useEtapa } from "../composables/useEtapa.jsx";
 import { useSeccionEquipo } from "../composables/useEquipoSeccion.jsx";
 import GaugeRadial from "../charts/GaugeRadial.jsx";
@@ -14,44 +13,46 @@ export default function PanelEtapa() {
     const { fkEtapaId } = useParams();
     const [lecturaDatas, setLecturaData] = useState([]);
     const [fkequipo, setFkequipo] = useState(null);
+    const [etapaNombre, setEtapaNombre] = useState(null);
     const { fetchEtapaId } = useEtapa();
     const { equipoData} = useSeccionEquipo(fkequipo);
     const {fetchLectura } = useLecturaEtapa();
-
 
     // Función para obtener los datos de la etapa
     const obtenerDatosEtapa = async () => {
         if (!fkEtapaId) return; // Evita la llamada si fkEtapaId es null o undefined
         try {
-            const {fkequipo } = await fetchEtapaId(fkEtapaId);
+            const {fkequipo, etapaNombre } = await fetchEtapaId(fkEtapaId);
             console.log("ID de equipo:", fkequipo);
+            console.log("Nombre de la etapa", etapaNombre);
 
             if (fkequipo) {
                 setFkequipo(fkequipo); // Establece el fkequipo
+            }
+            if (etapaNombre) {
+                setEtapaNombre(etapaNombre); // Nombre del proceso
             }
         } catch (error) {
             console.error("Error al obtener los datos de etapa:", error);
         }
     };
 
+    const recargarDatosSensores = async () => {
+        const groupedData = await fetchLectura(fkEtapaId);
+        if (groupedData) {
+            setLecturaData(groupedData);
+        }
+    };
 
     useEffect(() => {
         obtenerDatosEtapa();
     }, [fkEtapaId]);
 
-    // Use efecto para cargar lecturas al obtener el ID de etapa
     useEffect(() => {
-        if (fkEtapaId) {
-            (async () => {
-                const groupedData = await fetchLectura(fkEtapaId); // Llama a la función y obtiene los datos agrupados
-                if (groupedData) {
-                    setLecturaData(groupedData); // Establece los datos agrupados
+        recargarDatosSensores(); // Llama a la función cuando el componente se monte
+    }, []);
 
-                }
 
-            })();
-        }
-    }, [fkEtapaId]); // No incluir fetchLectura como dependencia
 
     console.log("lectura data:",lecturaDatas)
 
@@ -182,7 +183,20 @@ export default function PanelEtapa() {
                     <Tab key="equipos" title="Sensores">
                         <Card>
                             <CardHeader>
-                                <h2 className="panel">Proceso Actual: Etapa 1</h2>
+                                <div className="card-header-container">
+                                    {/* Parte izquierda - Proceso Actual */}
+                                    <div className="left-section">
+                                        <h2 className="panel">Proceso Actual: {etapaNombre}</h2>
+                                    </div>
+
+                                    {/* Parte derecha - Fecha, Hora, Duración */}
+
+                                </div>
+                                <div className="justify-items-end">
+                                    <h2>Fecha:</h2>
+                                    <h2>Hora:</h2>
+                                    <h2>Duración:</h2>
+                                </div>
                             </CardHeader>
                             <CardBody>
                                 <Table aria-label="Tabla de Procesos">
@@ -221,6 +235,9 @@ export default function PanelEtapa() {
 
                     <Tab key="graphics" title="Gráficas">
                         <Card>
+                            <CardHeader>
+                                <h2 className="panel">Proceso Actual: {etapaNombre}</h2>
+                            </CardHeader>
                             <CardBody>
                                 <div style={{
                                     display: 'flex',
@@ -235,7 +252,7 @@ export default function PanelEtapa() {
                                                      sensorType="ph"
 
                                         />
-                                        <Button color="secondary">
+                                        <Button color="secondary" onPress={recargarDatosSensores}>
                                             Recargar Datos
                                         </Button>
                                     </div>
@@ -246,7 +263,7 @@ export default function PanelEtapa() {
                                                      sensorType="oxygen"
                                         />
 
-                                        <Button color="secondary">
+                                        <Button color="secondary" onPress={recargarDatosSensores}>
                                             Recargar Datos
                                         </Button>
                                     </div>
@@ -256,7 +273,7 @@ export default function PanelEtapa() {
                                                      labelColor='#7827c8'
                                                      sensorType="temperature"
                                         />
-                                        <Button color="secondary">
+                                        <Button color="secondary" onPress={recargarDatosSensores}>
                                             Recargar Datos
                                         </Button>
                                     </div>
@@ -279,7 +296,7 @@ export default function PanelEtapa() {
                     <Tab key="data" title="Lecturas">
                         <Card>
                             <CardHeader>
-                                <h2 className="panel">Proceso Actual: Etapa 1</h2>
+                                <h2 className="panel">Proceso Actual: {etapaNombre}</h2>
                             </CardHeader>
                             <CardBody>
                                 <Table aria-label="Tabla de Procesos">

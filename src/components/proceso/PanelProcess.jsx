@@ -12,7 +12,7 @@ import {
     TableHeader,
     TableRow
 } from "@nextui-org/react";
-import {useNavigate, useParams} from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Plus} from "lucide-react";
 import AddProceso from "./AddProceso.jsx";
 import "./PanelProcess.css"
@@ -24,13 +24,16 @@ export default function PanelProcess() {
     const [modalBackdrop, setModalBackdrop] = useState('blur');
     const { fkProcesoId } = useParams();
     const [etapas, setEtapas] = useState([]);
-    const { fetchEtapa, loading, error } = useEtapa();
+    const { fetchEtapa } = useEtapa();
+    const location = useLocation(); // Para obtener el nombre del proceso
+
+
+    // Obtener el nombre del proceso del estado (si está disponible)
+    const nombreProceso = location.state?.nombre || 'Desconocido';
 
     // Estado para la paginación
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
-
-
 
     // Encapsulamos la lógica en una función
     const obtenerDatosProcess = async () => {
@@ -109,7 +112,7 @@ export default function PanelProcess() {
             {topContent}
             <Card>
                 <CardHeader>
-                    <h2 className="panel">Proceso Actual: Etapa 1</h2>
+                    <h2 className="panel">Proceso Actual: {nombreProceso}</h2>
                 </CardHeader>
                 <CardBody>
                     <Table aria-label="Tabla de Procesos">

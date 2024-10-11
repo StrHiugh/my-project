@@ -67,10 +67,12 @@ export const useEtapa = () => {
 
             console.log('Objeto Principal:', etapaPrincipal);
             console.log('Objeto fkProceso:', fkProceso.fkequipo);
+
+            const etapaNombre = etapa?.nombre;  // Obtenemos el nombre del proceso
             const fkequipo = fkProceso?.fkequipo; // Obtén fkequipo del fkProceso
             if (fkequipo) {
                 // Aquí se debería ejecutar fetchSeccionEquipo directamente
-                return { etapaData: etapaPrincipal, fkequipo }; // Retorna la etapa y el fkequipo
+                return { etapaData: etapaPrincipal, fkequipo, etapaNombre}; // Retorna la etapa y el fkequipo
             }
             return { etapaData: etapaPrincipal, fkequipo: null };         } catch (err) {
             setError(err.message);
