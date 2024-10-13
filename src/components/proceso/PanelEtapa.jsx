@@ -1,19 +1,40 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
-import { Tabs, Tab, Card, CardBody, Button, BreadcrumbItem, Breadcrumbs, CardHeader, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@nextui-org/react";
+import {
+    Tabs,
+    Tab,
+    Card,
+    CardBody,
+    Button,
+    BreadcrumbItem,
+    Breadcrumbs,
+    CardHeader,
+    Table,
+    TableHeader,
+    TableColumn,
+    TableBody,
+    TableRow,
+    TableCell,
+    Pagination,
+    Chip
+} from "@nextui-org/react";
 import { useNavigate, useParams } from "react-router-dom";
-import {Blocks,} from "lucide-react";
+import {Blocks, CheckIcon,} from "lucide-react";
 import { useEtapa } from "../composables/useEtapa.jsx";
 import { useSeccionEquipo } from "../composables/useEquipoSeccion.jsx";
 import GaugeRadial from "../charts/GaugeRadial.jsx";
 import AreaGraphic from "../charts/AreaGraphic.jsx";
 import {useLecturaEtapa} from "../composables/useLecturaEtapa.jsx";
-
+import "./PanelEtapa.css"
 export default function PanelEtapa() {
     const navigate = useNavigate();
     const { fkEtapaId } = useParams();
     const [lecturaDatas, setLecturaData] = useState([]);
     const [fkequipo, setFkequipo] = useState(null);
     const [etapaNombre, setEtapaNombre] = useState(null);
+    const [etapaDuracion, setEtapaDuracion] = useState(null);
+    const [etapaFecha, setEtapaFecha] = useState(null);
+    const [etapaHora, setEtapaHora] = useState(null);
+    const [estatus, setEtapaEstatus] = useState(null);
     const { fetchEtapaId } = useEtapa();
     const { equipoData} = useSeccionEquipo(fkequipo);
     const {fetchLectura } = useLecturaEtapa();
@@ -22,15 +43,30 @@ export default function PanelEtapa() {
     const obtenerDatosEtapa = async () => {
         if (!fkEtapaId) return; // Evita la llamada si fkEtapaId es null o undefined
         try {
-            const {fkequipo, etapaNombre } = await fetchEtapaId(fkEtapaId);
+            const {fkequipo, etapaNombre, duracion, created, hora, estatus } = await fetchEtapaId(fkEtapaId);
             console.log("ID de equipo:", fkequipo);
             console.log("Nombre de la etapa", etapaNombre);
+            console.log("Nombre de la etapa", duracion);
+            console.log("Nombre de la etapa", created);
+            console.log("Nombre de la etapa", hora);
 
             if (fkequipo) {
                 setFkequipo(fkequipo); // Establece el fkequipo
             }
             if (etapaNombre) {
                 setEtapaNombre(etapaNombre); // Nombre del proceso
+            }
+            if (duracion) {
+                setEtapaDuracion(duracion); // Nombre del proceso
+            }
+            if (created) {
+                setEtapaFecha(created); // Nombre del proceso
+            }
+            if (hora) {
+                setEtapaHora(hora); // Nombre del proceso
+            }
+            if (estatus) {
+                setEtapaEstatus(estatus); // Nombre del proceso
             }
         } catch (error) {
             console.error("Error al obtener los datos de etapa:", error);
@@ -156,28 +192,44 @@ export default function PanelEtapa() {
         setCurrentPageEquipo(page);
     };
 
-    const topContent = useMemo(() => {
-        return (
+    return (
+        <div>
+            <Breadcrumbs variant="solid" className="p-3">
+                <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(-1)}>Panel Proceso</BreadcrumbItem>
+                <BreadcrumbItem>Panel Etapa</BreadcrumbItem>
+            </Breadcrumbs>
             <div className="flex flex-col gap-4 mb-4">
                 <div className="flex justify-between gap-3 items-end">
                     <h1 className="pro-text">Panel Etapa</h1>
+                    <Card>
+                        <div className="card-padding"><h2>Fecha: {etapaFecha} </h2></div>
+                    </Card>
+                    <Card>
+                        <div className="card-padding"><h2>Hora: {etapaHora}</h2></div>
+                    </Card>
+                    <Card>
+                        <div className="card-padding"><h2>Duración: {etapaDuracion} </h2></div>
+                    </Card>
+                    <Card>
+                        <div>
+                            <Chip
+                                startContent={<CheckIcon size={18}/>}
+                                variant="shadow"
+                                color="success"
+
+                            >
+                                {estatus === 3 ? "Activo" : "Desactivado"}
+                            </Chip>
+                        </div>
+
+                    </Card>
 
                     <Button color="secondary" endContent={<Blocks/>}>
                         Desactivar
                     </Button>
                 </div>
             </div>
-        );
-    }, []);
-
-    return (
-        <div>
-            <Breadcrumbs variant="solid">
-                <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
-                <BreadcrumbItem onPress={() => navigate(-1)}>Panel Proceso</BreadcrumbItem>
-                <BreadcrumbItem>Panel Etapa</BreadcrumbItem>
-            </Breadcrumbs>
-            {topContent}
             <div>
                 <Tabs aria-label="Options" color="secondary">
                     <Tab key="equipos" title="Sensores">
@@ -188,14 +240,6 @@ export default function PanelEtapa() {
                                     <div className="left-section">
                                         <h2 className="panel">Proceso Actual: {etapaNombre}</h2>
                                     </div>
-
-                                    {/* Parte derecha - Fecha, Hora, Duración */}
-
-                                </div>
-                                <div className="justify-items-end">
-                                    <h2>Fecha:</h2>
-                                    <h2>Hora:</h2>
-                                    <h2>Duración:</h2>
                                 </div>
                             </CardHeader>
                             <CardBody>
@@ -307,7 +351,7 @@ export default function PanelEtapa() {
                                             </TableColumn>
                                         )}
                                     </TableHeader>
-                                    <TableBody items={Array.isArray(paginatedData) ? paginatedData: []}>
+                                    <TableBody items={Array.isArray(paginatedData) ? paginatedData : []}>
                                         {(item) => (
                                             <TableRow key={item.id}>
                                                 {(columnKey) =>

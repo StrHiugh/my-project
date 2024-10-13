@@ -1,0 +1,20 @@
+.card-header-container {
+    display: flex;            /* Flexbox para alinear los elementos en una línea */
+    justify-content: space-between;  /* Espacio entre los dos lados (izquierda y derecha) */
+    width: 100%;              /* Ocupa todo el ancho del CardHeader */
+}
+
+.left-section {
+    flex: 1;                  /* Ocupa la mayor parte de la izquierda */
+    text-align: left;         /* Alinea el contenido a la izquierda */
+}
+
+
+.card-padding {
+    padding: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Open Sans; /* Ajusta el valor de padding según lo que necesites */
+}
+
+

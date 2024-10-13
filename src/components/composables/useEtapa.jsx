@@ -70,9 +70,13 @@ export const useEtapa = () => {
 
             const etapaNombre = etapa?.nombre;  // Obtenemos el nombre del proceso
             const fkequipo = fkProceso?.fkequipo; // Obtén fkequipo del fkProceso
+            const duracion = etapa?.duracion; // Obtén fkequipo del fkProceso
+            const created = etapa?.created_at; // Obtén fkequipo del fkProceso
+            const hora = etapa?.createdTime_at; // Obtén fkequipo del fkProceso
+            const estatus = etapa?.activo; // Obtén fkequipo del fkProceso
             if (fkequipo) {
                 // Aquí se debería ejecutar fetchSeccionEquipo directamente
-                return { etapaData: etapaPrincipal, fkequipo, etapaNombre}; // Retorna la etapa y el fkequipo
+                return { etapaData: etapaPrincipal, fkequipo, etapaNombre, duracion, created, hora, estatus}; // Retorna la etapa y el fkequipo
             }
             return { etapaData: etapaPrincipal, fkequipo: null };         } catch (err) {
             setError(err.message);
