@@ -85,10 +85,65 @@ export const useEtapa = () => {
         }
     }
 
+    // Función para crear una nueva etapa
+    async function postEtapa(fkprocesoId, nuevaEtapa) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/registro/`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    fkProceso: fkprocesoId, //  ID del proceso
+                    ...nuevaEtapa //   datos de nuevaEtapa
+                })
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json(); // Obtener respuesta de error
+                throw new Error(`Error al crear el proceso: ${errorResponse.message}`);
+            }
+
+            const data = await response.json();
+            return data; // Retorna la nueva etapa creada
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+    // Función para actualizar una etapa existente
+    async function putEtapa(fkprocesoId, fkEtapaId) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/${fkEtapaId}/`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(fkprocesoId)
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al actualizar el proceso');
+            }
+
+            const data = await response.json();
+            return data; // Retorna la etapa actualizada
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+
+
+
     // Retornar ambas funciones y los estados relevantes
     return {
         fetchEtapa,
         fetchEtapaId,
+        postEtapa,
+        putEtapa,
         setEtapaDetail,
         etapaData,
         loading,

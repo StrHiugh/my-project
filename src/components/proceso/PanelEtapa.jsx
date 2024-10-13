@@ -30,6 +30,7 @@ import BreadcrumbSection from "./BreadcrumSection.jsx";
 import SensorTable from "./SensorTable.jsx";
 import LecturaTable from "./LecturaTable.jsx";
 import GraphicsTab from "./GraphicsTab.jsx";
+import CompositionExample from "../charts/GaugeRadial.jsx";
 
 export default function PanelEtapa() {
     const navigate = useNavigate();
@@ -44,6 +45,7 @@ export default function PanelEtapa() {
     const [isLoading, setIsLoading] = useState(false);
 
     const {fetchEtapaId} = useEtapa();
+    const {putEtapa} = useEtapa();
     const {equipoData} = useSeccionEquipo(fkequipo);
     const {fetchLectura} = useLecturaEtapa();
 
@@ -99,6 +101,9 @@ export default function PanelEtapa() {
     useEffect(() => {
         recargarDatosSensores();
     }, []);
+
+
+
 
 
     console.log("lectura data:", lecturaDatas)
@@ -221,8 +226,10 @@ export default function PanelEtapa() {
                     </div>
 
 
-                    <Button color="secondary" endContent={<Blocks/>}>
-                        Desactivar
+                    <Button color="secondary" endContent={<Blocks/>}
+
+                    >
+                        xczxc
                     </Button>
                 </div>
             </div>

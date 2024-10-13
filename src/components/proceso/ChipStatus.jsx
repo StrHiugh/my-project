@@ -6,7 +6,7 @@ function ChipStatus({estatus}) {
         <Chip
             startContent={<CheckIcon size={18}/>}
             variant="shadow"
-            color={estatus === 3 ? "success" : "danger"}
+            color={estatus === 1 ? "success" : "danger"}
             size="lg"
             style={{
                 padding: "21px",
@@ -14,7 +14,7 @@ function ChipStatus({estatus}) {
                 fontSize: "18px",
             }}
         >
-            {estatus === 3 ? "Activo" : "Desactivado"}
+            {estatus === 1 ? "Activo" : "Desactivado"}
         </Chip>
     );
 }

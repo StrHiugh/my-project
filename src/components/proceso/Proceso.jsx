@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/react";
 import {Plus,} from "lucide-react";
 import "./Proceso.css"
-import AddProceso from "./AddProceso";
+import AddEtapa from "./AddEtapa.jsx";
 import {useNavigate} from 'react-router-dom';
 
 function Proceso() {
@@ -131,7 +131,7 @@ function Proceso() {
                     </div>
                 </CardBody>
             </Card>
-            <AddProceso
+            <AddEtapa
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}
                 backdrop={modalBackdrop}
