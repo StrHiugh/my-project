@@ -118,7 +118,7 @@ export default function AreaGraphic({ lecturaDatas, sensorName  }) {
 
     return (
         <div>
-            <h2><strong>{sensorName}</strong></h2>
+            <h2 style={{textAlign: 'center'}}><strong>{sensorName}</strong></h2>
             <div id="chart">
                 <ReactApexChart options={options} series={series} type="area" height={350}/>
             </div>

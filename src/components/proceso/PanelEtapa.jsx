@@ -17,17 +17,23 @@ import {
     Pagination,
     Chip
 } from "@nextui-org/react";
-import { useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Blocks, CheckIcon,} from "lucide-react";
-import { useEtapa } from "../composables/useEtapa.jsx";
-import { useSeccionEquipo } from "../composables/useEquipoSeccion.jsx";
+import {useEtapa} from "../composables/useEtapa.jsx";
+import {useSeccionEquipo} from "../composables/useEquipoSeccion.jsx";
 import GaugeRadial from "../charts/GaugeRadial.jsx";
 import AreaGraphic from "../charts/AreaGraphic.jsx";
 import {useLecturaEtapa} from "../composables/useLecturaEtapa.jsx";
 import "./PanelEtapa.css"
+import ChipStatus from "./ChipStatus.jsx";
+import BreadcrumbSection from "./BreadcrumSection.jsx";
+import SensorTable from "./SensorTable.jsx";
+import LecturaTable from "./LecturaTable.jsx";
+import GraphicsTab from "./GraphicsTab.jsx";
+
 export default function PanelEtapa() {
     const navigate = useNavigate();
-    const { fkEtapaId } = useParams();
+    const {fkEtapaId} = useParams();
     const [lecturaDatas, setLecturaData] = useState([]);
     const [fkequipo, setFkequipo] = useState(null);
     const [etapaNombre, setEtapaNombre] = useState(null);
@@ -35,15 +41,17 @@ export default function PanelEtapa() {
     const [etapaFecha, setEtapaFecha] = useState(null);
     const [etapaHora, setEtapaHora] = useState(null);
     const [estatus, setEtapaEstatus] = useState(null);
-    const { fetchEtapaId } = useEtapa();
-    const { equipoData} = useSeccionEquipo(fkequipo);
-    const {fetchLectura } = useLecturaEtapa();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const {fetchEtapaId} = useEtapa();
+    const {equipoData} = useSeccionEquipo(fkequipo);
+    const {fetchLectura} = useLecturaEtapa();
 
     // Función para obtener los datos de la etapa
     const obtenerDatosEtapa = async () => {
-        if (!fkEtapaId) return; // Evita la llamada si fkEtapaId es null o undefined
+        if (!fkEtapaId) return; // evita la llamada si fkEtapaId es null o undefined
         try {
-            const {fkequipo, etapaNombre, duracion, created, hora, estatus } = await fetchEtapaId(fkEtapaId);
+            const {fkequipo, etapaNombre, duracion, created, hora, estatus} = await fetchEtapaId(fkEtapaId);
             console.log("ID de equipo:", fkequipo);
             console.log("Nombre de la etapa", etapaNombre);
             console.log("Nombre de la etapa", duracion);
@@ -51,22 +59,22 @@ export default function PanelEtapa() {
             console.log("Nombre de la etapa", hora);
 
             if (fkequipo) {
-                setFkequipo(fkequipo); // Establece el fkequipo
+                setFkequipo(fkequipo); // fk equipo
             }
             if (etapaNombre) {
-                setEtapaNombre(etapaNombre); // Nombre del proceso
+                setEtapaNombre(etapaNombre); // nombre del proceso
             }
             if (duracion) {
-                setEtapaDuracion(duracion); // Nombre del proceso
+                setEtapaDuracion(duracion); // duracion del proceso
             }
             if (created) {
-                setEtapaFecha(created); // Nombre del proceso
+                setEtapaFecha(created); // fecha de creacion
             }
             if (hora) {
-                setEtapaHora(hora); // Nombre del proceso
+                setEtapaHora(hora); // hora de creacion
             }
             if (estatus) {
-                setEtapaEstatus(estatus); // Nombre del proceso
+                setEtapaEstatus(estatus); // estatus del proceso
             }
         } catch (error) {
             console.error("Error al obtener los datos de etapa:", error);
@@ -74,10 +82,14 @@ export default function PanelEtapa() {
     };
 
     const recargarDatosSensores = async () => {
+        setIsLoading(true);
+
         const groupedData = await fetchLectura(fkEtapaId);
         if (groupedData) {
             setLecturaData(groupedData);
         }
+        setIsLoading(false);
+
     };
 
     useEffect(() => {
@@ -85,12 +97,11 @@ export default function PanelEtapa() {
     }, [fkEtapaId]);
 
     useEffect(() => {
-        recargarDatosSensores(); // Llama a la función cuando el componente se monte
+        recargarDatosSensores();
     }, []);
 
 
-
-    console.log("lectura data:",lecturaDatas)
+    console.log("lectura data:", lecturaDatas)
 
 
     // Aplana los datos de lecturaDatas en un solo array
@@ -104,27 +115,23 @@ export default function PanelEtapa() {
                 lastValue: data[data.length - 1].valor, // Cambia 'valor' por el nombre correcto de la propiedad
             };
         }
-        return { sensorId, lastValue: null }; // Maneja el caso de que no haya datos
+        return {sensorId, lastValue: null};
     });
     console.log(lastData);
 
-    // Asumiendo que solo tienes dos sensores: pH y Oxígeno Disuelto
-    const phData = lastData.find(sensor => sensor.sensorId === '13'); // Cambia 'pH' según el ID de tu sensor
-    const oxigenoData = lastData.find(sensor => sensor.sensorId === '8'); // Cambia según el ID correcto
-    const tempData = lastData.find(sensor => sensor.sensorId === '9'); // Cambia según el ID correcto
-
-
-
-
+    //datos de los sensores
+    const phData = lastData.find(sensor => sensor.sensorId === '13');
+    const oxigenoData = lastData.find(sensor => sensor.sensorId === '8');
+    const tempData = lastData.find(sensor => sensor.sensorId === '9');
 
 
     const columns = [
-            {name: "ID", uid: "id"},
-            {name: "Nombre", uid: "name"},
-            {name: "Equipo", uid: "equip"},
-            {name: "Acciones", uid: "actions"},
+        {name: "ID", uid: "id"},
+        {name: "Nombre", uid: "name"},
+        {name: "Equipo", uid: "equip"},
+        {name: "Acciones", uid: "actions"},
 
-        ];
+    ];
 
     const renderCell = (item, columnKey) => {
         switch (columnKey) {
@@ -135,7 +142,7 @@ export default function PanelEtapa() {
             case "equip":
                 return item.fkequipo_nombre;
             case "actions":
-                return <Button color="secondary" >Sensores</Button>;
+                return <Button color="secondary">Sensores</Button>;
             default:
                 return null;
         }
@@ -143,9 +150,9 @@ export default function PanelEtapa() {
 
     //paginacion
     const columnsLecturas = [
-        { name: "ID", uid: "id" },
-        { name: "Valor", uid: "value" },
-        { name: "Sensor", uid: "sensor" },
+        {name: "ID", uid: "id"},
+        {name: "Valor", uid: "value"},
+        {name: "Sensor", uid: "sensor"},
     ];
 
     const renderCellLecturas = (item, columnKey) => {
@@ -194,11 +201,8 @@ export default function PanelEtapa() {
 
     return (
         <div>
-            <Breadcrumbs variant="solid" className="p-3">
-                <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
-                <BreadcrumbItem onPress={() => navigate(-1)}>Panel Proceso</BreadcrumbItem>
-                <BreadcrumbItem>Panel Etapa</BreadcrumbItem>
-            </Breadcrumbs>
+            <BreadcrumbSection />
+
             <div className="flex flex-col gap-4 mb-4">
                 <div className="flex justify-between gap-3 items-end">
                     <h1 className="pro-text">Panel Etapa</h1>
@@ -211,19 +215,11 @@ export default function PanelEtapa() {
                     <Card>
                         <div className="card-padding"><h2>Duración: {etapaDuracion} </h2></div>
                     </Card>
-                    <Card>
-                        <div>
-                            <Chip
-                                startContent={<CheckIcon size={18}/>}
-                                variant="shadow"
-                                color="success"
 
-                            >
-                                {estatus === 3 ? "Activo" : "Desactivado"}
-                            </Chip>
-                        </div>
+                    <div>
+                        <ChipStatus estatus={estatus} />
+                    </div>
 
-                    </Card>
 
                     <Button color="secondary" endContent={<Blocks/>}>
                         Desactivar
@@ -233,146 +229,41 @@ export default function PanelEtapa() {
             <div>
                 <Tabs aria-label="Options" color="secondary">
                     <Tab key="equipos" title="Sensores">
-                        <Card>
-                            <CardHeader>
-                                <div className="card-header-container">
-                                    {/* Parte izquierda - Proceso Actual */}
-                                    <div className="left-section">
-                                        <h2 className="panel">Proceso Actual: {etapaNombre}</h2>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardBody>
-                                <Table aria-label="Tabla de Procesos">
-                                    <TableHeader columns={columns}>
-                                        {(column) => (
-                                            <TableColumn key={column.uid}>
-                                                {column.name}
-                                            </TableColumn>
-                                        )}
-                                    </TableHeader>
-                                    <TableBody items={Array.isArray(paginatedEquipoData) ? paginatedEquipoData : []}>
-                                        {(item) => (
-                                            <TableRow key={item.id}>
-                                                {(columnKey) =>
-                                                    <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                                <div className="flex w-full justify-center mt-4">
-                                    <Pagination
-                                        isCompact
-                                        showControls
-                                        showShadow
-                                        color="secondary"
-                                        page={currentPageEquipo}
-                                        total={totalPagesEquipo}
-                                        onChange={handlePageChangeEquipo}
-                                    />
-                                </div>
-                            </CardBody>
-
-                        </Card>
+                        <SensorTable
+                            columns={columns}
+                            paginatedEquipoData={paginatedEquipoData}
+                            currentPageEquipo={currentPageEquipo}
+                            totalPagesEquipo={totalPagesEquipo}
+                            handlePageChangeEquipo={handlePageChangeEquipo}
+                            renderCell={renderCell}
+                            etapaNombre={etapaNombre}
+                        />
                     </Tab>
 
 
                     <Tab key="graphics" title="Gráficas">
-                        <Card>
-                            <CardHeader>
-                                <h2 className="panel">Proceso Actual: {etapaNombre}</h2>
-                            </CardHeader>
-                            <CardBody>
-                                <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    gap: '20px'
-                                }}>
-                                    <div>
-                                        <GaugeRadial labels="pH"
-                                                     series={phData ? parseFloat(phData.lastValue) : 0}
-                                                     labelColor='#7827c8'
-                                                     sensorType="ph"
-
-                                        />
-                                        <Button color="secondary" onPress={recargarDatosSensores}>
-                                            Recargar Datos
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <GaugeRadial labels="Oxigeno Disuelto"
-                                                     series={oxigenoData ? parseFloat(oxigenoData.lastValue) : 0}
-                                                     labelColor='#7827c8'
-                                                     sensorType="oxygen"
-                                        />
-
-                                        <Button color="secondary" onPress={recargarDatosSensores}>
-                                            Recargar Datos
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <GaugeRadial labels="Temperatura"
-                                                     series={tempData ? parseFloat(tempData.lastValue) : 0}
-                                                     labelColor='#7827c8'
-                                                     sensorType="temperature"
-                                        />
-                                        <Button color="secondary" onPress={recargarDatosSensores}>
-                                            Recargar Datos
-                                        </Button>
-                                    </div>
-
-
-                                </div>
-                                <div className="mt-16">
-                                    {Object.entries(lecturaDatas).map(([sensorId, data]) => (
-                                        <AreaGraphic key={sensorId}
-                                                     lecturaDatas={data}
-                                                     sensorName={data[0]?.fkESeccionEquipoSensor?.fkseccionEquipo_nombre || "Sensor Desconocido"} // Extraer el nombre del sensor
-                                        />
-                                    ))}
-                                </div>
-                            </CardBody>
-                        </Card>
+                        <GraphicsTab
+                            phData={phData}
+                            oxigenoData={oxigenoData}
+                            tempData={tempData}
+                            recargarDatosSensores={recargarDatosSensores}
+                            etapaNombre={etapaNombre}
+                            lecturaDatas={lecturaDatas}
+                            isLoading={isLoading}
+                        />
                     </Tab>
 
 
                     <Tab key="data" title="Lecturas">
-                        <Card>
-                            <CardHeader>
-                                <h2 className="panel">Proceso Actual: {etapaNombre}</h2>
-                            </CardHeader>
-                            <CardBody>
-                                <Table aria-label="Tabla de Procesos">
-                                    <TableHeader columns={columnsLecturas}>
-                                        {(column) => (
-                                            <TableColumn key={column.uid}>
-                                                {column.name}
-                                            </TableColumn>
-                                        )}
-                                    </TableHeader>
-                                    <TableBody items={Array.isArray(paginatedData) ? paginatedData : []}>
-                                        {(item) => (
-                                            <TableRow key={item.id}>
-                                                {(columnKey) =>
-                                                    <TableCell>{renderCellLecturas(item, columnKey)}</TableCell>}
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                                <div className="flex w-full justify-center mt-4">
-                                    <Pagination
-                                        isCompact
-                                        showControls
-                                        showShadow
-                                        color="secondary"
-                                        page={currentPage}
-                                        total={totalPages}
-                                        onChange={handlePageChange}/>
-                                </div>
-                            </CardBody>
-
-                        </Card>
+                        <LecturaTable
+                            columnsLecturas={columnsLecturas}
+                            paginatedData={paginatedData}
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            handlePageChange={handlePageChange}
+                            renderCellLecturas={renderCellLecturas}
+                            etapaNombre={etapaNombre}
+                        />
                     </Tab>
                 </Tabs>
             </div>
