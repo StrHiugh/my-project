@@ -53,14 +53,6 @@ export default function PanelProcess() {
         obtenerDatosProcess();
     }, [fkProcesoId]);
 
-    function convertirADuracionEnMilisegundos(duracion) {
-        const partes = duracion.split(':');
-        const horas = parseInt(partes[0], 10) || 0;
-        const minutos = parseInt(partes[1], 10) || 0;
-        const segundos = parseInt(partes[2], 10) || 0;
-
-        return (horas * 3600 + minutos * 60 + segundos) * 1000; // Convertir a milisegundos
-    }
 
     const handleAddEtapa = async (nuevaEtapa) => {
         console.log("fkProcesoId:", fkProcesoId);

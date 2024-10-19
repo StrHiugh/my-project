@@ -102,11 +102,8 @@ export default function PanelEtapa() {
         recargarDatosSensores();
     }, []);
 
-
-
-
-
     console.log("lectura data:", lecturaDatas)
+
 
 
     // Aplana los datos de lecturaDatas en un solo array
@@ -204,6 +201,9 @@ export default function PanelEtapa() {
         setCurrentPageEquipo(page);
     };
 
+
+
+
     return (
         <div>
             <BreadcrumbSection />
@@ -226,10 +226,11 @@ export default function PanelEtapa() {
                     </div>
 
 
-                    <Button color="secondary" endContent={<Blocks/>}
-
+                    <Button
+                        color="secondary"
+                        endContent={<Blocks />}
                     >
-                        xczxc
+                        uhasdj
                     </Button>
                 </div>
             </div>
