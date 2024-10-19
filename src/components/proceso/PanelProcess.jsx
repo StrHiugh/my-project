@@ -27,7 +27,8 @@ export default function PanelProcess() {
     const {fetchEtapa} = useEtapa();
     const {postEtapa} = useEtapa();
     const location = useLocation(); // Para obtener el nombre del proceso
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
 
     // Obtener el nombre del proceso del estado (si está disponible)
     const nombreProceso = location.state?.nombre || 'Desconocido';
@@ -87,16 +88,14 @@ export default function PanelProcess() {
             case "duration":
                 return item.duracion;
             case "actions":
-                return <Button color="secondary" onPress={() => navigate(`/PanelEtapa/${item.id}/${fkProcesoId}`)}>Entrar</Button>;
+                return <Button color="secondary" onPress={() => navigate(`/PanelEtapa/${item.id}`, { state: { fkProcesoId } })}>Entrar</Button>;
             default:
                 return null;
         }
     };
 
-    // Paginación para etapas
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8; // Elementos por página
-    const totalPages = Math.ceil((etapas?.length || 0) / itemsPerPage);
+    // Paginación para panelprocess
+    const totalPages = Math.ceil(etapas?.length / itemsPerPage);
 
     // Asegúrate de que etapas es un array
     const paginatedData = Array.isArray(etapas) ? etapas.slice(

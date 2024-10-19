@@ -10,8 +10,9 @@ import {
 } from "@nextui-org/react";
 import {Plus,} from "lucide-react";
 import "./Proceso.css"
-import AddEtapa from "./AddEtapa.jsx";
 import {useNavigate} from 'react-router-dom';
+import AddProceso from "./AddProceso.jsx";
+import {useProceso} from "../composables/useProceso.jsx";
 
 function Proceso() {
     const [processes, setProcesses] = useState([]);
@@ -20,33 +21,37 @@ function Proceso() {
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalBackdrop, setModalBackdrop] = useState('blur');
     const navigate = useNavigate();
-
-    const [currentPage, setCurrentPage] = useState(1);
+    const { fetchProceso, postProceso } = useProceso();
     const [rowsPerPage] = useState(10);
 
+    // Función para obtener los procesos usando el hook
+    const getProcesses = async () => {
+        try {
+            const data = await fetchProceso(); // Usa el hook para obtener los procesos
+            setProcesses(data.results);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        fetch('http://localhost:8000/api/v1/proceso/', {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Token cfc8340bc8d44383934ef380d4a9f71c26305ad6',
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setProcesses(data.results);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error.message);
-                setLoading(false);
-            });
-    }, []);
+        getProcesses(); // Llama a la función al cargar el componente
+    }, [fetchProceso]);
+
+    const handleAddProceso = async (nuevoProceso) => {
+        console.log("nuevo proceso:", nuevoProceso); // Verifica el contenido de nuevaEtapa
+        try {
+            const data = await postProceso(nuevoProceso);
+            console.log("Nuevo proceso creado:", data);
+            await getProcesses();  // Reutiliza la función que obtienes los datos
+
+        } catch (error) {
+            console.error("Error al agregar el proceso", error);
+        }
+    };
+
 
     const columns = [
         {name: "ID", uid: "id"},
@@ -70,12 +75,20 @@ function Proceso() {
         }
     };
 
-    // Función para obtener los datos paginados
-    const paginatedData = () => {
-        const startIndex = (currentPage - 1) * rowsPerPage;
-        const endIndex = startIndex + rowsPerPage;
-        return processes.slice(startIndex, endIndex);
+    // Paginación para process
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8; // Elementos por página
+    const totalPages = Math.ceil(processes.length / itemsPerPage);
+
+    const paginatedData = Array.isArray(processes) ? processes.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    ): [];
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
     };
+
 
     const topContent = useMemo(() => {
         return (
@@ -83,7 +96,7 @@ function Proceso() {
                 <div className="flex justify-between gap-3 items-end">
                     <h1 className="pro-text">Procesos</h1>
                     <Button color="secondary" endContent={<Plus/>} onPress={() => setModalOpen(true)}>
-                        Nuevo
+                        Nuevo Proceso
                     </Button>
                 </div>
             </div>
@@ -110,7 +123,7 @@ function Proceso() {
                                 </TableColumn>
                             )}
                         </TableHeader>
-                        <TableBody items={processes}>
+                        <TableBody items={Array.isArray(paginatedData) ? paginatedData : []}>
                             {(item) => (
                                 <TableRow key={item.id}>
                                     {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
@@ -125,17 +138,19 @@ function Proceso() {
                             showShadow
                             color="secondary"
                             page={currentPage}
-                            total={Math.ceil(processes.length / rowsPerPage)}
-                            onChange={(page) => setCurrentPage(page)}
+                            total={totalPages}
+                            onChange={handlePageChange}
                         />
                     </div>
                 </CardBody>
             </Card>
-            <AddEtapa
+            <AddProceso
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}
                 backdrop={modalBackdrop}
                 setBackdrop={setModalBackdrop}
+                onAddProceso={handleAddProceso} // Pasa la función al modal
+
             />
         </div>
     );

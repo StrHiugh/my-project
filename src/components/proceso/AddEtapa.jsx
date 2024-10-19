@@ -53,7 +53,7 @@ export default function AddEtapa({ isOpen, onClose, backdrop, setBackdrop, onAdd
             <ModalContent>
                 {(onClose) => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">Añadir Procesos</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1">Añadir Etapas</ModalHeader>
                         <ModalBody>
                             <Input
                                 autoFocus
