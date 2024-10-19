@@ -17,23 +17,28 @@ export default function AddEtapa({ isOpen, onClose, backdrop, setBackdrop, onAdd
         return `${twoDigits(hour)}:${twoDigits(minute)}:${twoDigits(second)}`;
     };
     // Manejar el evento de agregar etapa
-    const handleAdd  = () => {
+    const handleAdd = () => {
         const duracionFormatted = formatTime(duracion.hour, duracion.minute, duracion.second);
         const nuevaEtapa = {
             nombre,
-            activo: activo ? 1 : 3, // Asumiendo que 1 es activo y 0 inactivo
-            duracion:  duracionFormatted,
+            activo: activo ? 1 : 3, // Asumiendo que 1 es activo y 3 inactivo
+            duracion: duracionFormatted,
         };
 
         console.log("Nueva etapa agregada:", nuevaEtapa);
 
-        onAddEtapa(nuevaEtapa);
+        if (typeof onAddEtapa === 'function') {
+            onAddEtapa(nuevaEtapa); // Verifica que onAddEtapa sea una función
+        } else {
+            console.error("onAddEtapa no es una función válida");
+        }
 
         setNombre("");
         setActivo(true);
         setDuracion("");
         onClose();
     };
+
 
     return (
         <Modal

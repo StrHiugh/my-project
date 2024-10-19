@@ -113,7 +113,7 @@ export const useEtapa = () => {
     }
 
     // Función para actualizar una etapa existente
-    async function putEtapa(fkprocesoId, fkEtapaId) {
+    async function putEtapa(fkprocesoId, fkEtapaId, estado) {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/${fkEtapaId}/`, {
                 method: 'PUT',
@@ -121,7 +121,7 @@ export const useEtapa = () => {
                     Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(fkprocesoId)
+                body: JSON.stringify({ fkProcesoId: fkprocesoId, estado }) // Envía el nuevo estado
             });
 
             if (!response.ok) {
