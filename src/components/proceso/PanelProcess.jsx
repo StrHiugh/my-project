@@ -45,7 +45,7 @@ export default function PanelProcess() {
                 console.error("Los datos obtenidos no son un array válido:", data);
             }
         } catch (error) {
-            console.error("Error al obtener los datos de etapa:", error);
+            console.error("Error al obtener los datos de planta:", error);
         }
     };
 
@@ -60,11 +60,11 @@ export default function PanelProcess() {
         console.log("nuevaEtapa:", nuevaEtapa); // Verifica el contenido de nuevaEtapa
         try {
             const data = await postEtapa(fkProcesoId, nuevaEtapa);
-            console.log("Nueva etapa creada:", data);
+            console.log("Nueva planta creada:", data);
             await obtenerDatosProcess();  // Reutiliza la función que obtienes los datos
 
         } catch (error) {
-            console.error("Error al agregar la etapa:", error);
+            console.error("Error al agregar la planta:", error);
         }
     };
 
@@ -124,7 +124,7 @@ export default function PanelProcess() {
 
         <div>
             <Breadcrumbs variant="solid">
-                <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(`/Proceso`)}>Proceso</BreadcrumbItem>
                 <BreadcrumbItem>Panel Proceso</BreadcrumbItem>
             </Breadcrumbs>
             {topContent}

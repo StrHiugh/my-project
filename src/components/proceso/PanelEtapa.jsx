@@ -48,18 +48,18 @@ export default function PanelEtapa() {
     const {equipoData} = useSeccionEquipo(fkequipo);
     const {fetchLectura} = useLecturaEtapa();
 
-    console.log("fk del proceso en etapa: ", fkProcesoId);
+    console.log("fk del proceso en planta: ", fkProcesoId);
 
-    // Función para obtener los datos de la etapa
+    // Función para obtener los datos de la planta
     const obtenerDatosEtapa = async () => {
         if (!fkEtapaId) return; // evita la llamada si fkEtapaId es null o undefined
         try {
             const {fkequipo, etapaNombre, duracion, created, hora, estatus} = await fetchEtapaId(fkEtapaId);
             console.log("ID de equipo:", fkequipo);
-            console.log("Nombre de la etapa", etapaNombre);
-            console.log("Nombre de la etapa", duracion);
-            console.log("Nombre de la etapa", created);
-            console.log("Nombre de la etapa", hora);
+            console.log("Nombre de la planta", etapaNombre);
+            console.log("Nombre de la planta", duracion);
+            console.log("Nombre de la planta", created);
+            console.log("Nombre de la planta", hora);
 
             if (fkequipo) {
                 setFkequipo(fkequipo); // fk equipo
@@ -80,7 +80,7 @@ export default function PanelEtapa() {
                 setEtapaEstatus(estatus); // estatus del proceso
             }
         } catch (error) {
-            console.error("Error al obtener los datos de etapa:", error);
+            console.error("Error al obtener los datos de planta:", error);
         }
     };
 

@@ -21,10 +21,9 @@ export default function AddProceso({ isOpen, onClose, backdrop, onAddProceso }) 
     const [descripcion, setDescripcion] = useState("");
     const [usuario] = useState(5);
     const [selectedEquipo, setSelectedEquipo] = useState("");
-
     const { equipos, error, fetchEquipos } = useEquipo(); // Obtiene equipos y error
 
-    // Manejar el evento de agregar etapa
+    // Manejar el evento de agregar planta
     const handleAdd = () => {
         const nuevoProceso = {
             nombre,
@@ -48,9 +47,6 @@ export default function AddProceso({ isOpen, onClose, backdrop, onAddProceso }) 
         onClose();
     };
 
-    useEffect(() => {
-        fetchEquipos(); // Llama a la función cuando el componente se monte
-    }, [fetchEquipos]); // Añade fetchEquipos como dependencia
 
     return (
         <Modal

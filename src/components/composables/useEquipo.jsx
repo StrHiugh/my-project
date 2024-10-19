@@ -1,12 +1,12 @@
 // hooks/useEquipo.js
-import { useEffect, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 export function useEquipo() {
     const [equipos, setEquipos] = useState([]);
     const [error, setError] = useState(null);
 
     // Método para obtener equipos (GET)
-    const fetchEquipos = async () => {
+    const fetchEquipos = useCallback(async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/equipo/`, {
                 headers: {
@@ -26,7 +26,7 @@ export function useEquipo() {
             setError(error.message);
             console.error(error);
         }
-    };
+    },[]); // No hay dependencias, se mantendrá estable
 
     // Método para crear un nuevo equipo (POST)
     const postEquipos = async (equipo) => {

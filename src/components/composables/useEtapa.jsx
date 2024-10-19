@@ -31,7 +31,7 @@ export const useEtapa = () => {
     }
 
 
-    // Función para obtener etapa específica por id
+    // Función para obtener planta específica por id
     async function fetchEtapaId(fkEtapaId) {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/?id=${fkEtapaId}`, {
@@ -76,7 +76,7 @@ export const useEtapa = () => {
             const estatus = etapa?.activo; // Obtén fkequipo del fkProceso
             if (fkequipo) {
                 // Aquí se debería ejecutar fetchSeccionEquipo directamente
-                return { etapaData: etapaPrincipal, fkequipo, etapaNombre, duracion, created, hora, estatus}; // Retorna la etapa y el fkequipo
+                return { etapaData: etapaPrincipal, fkequipo, etapaNombre, duracion, created, hora, estatus}; // Retorna la planta y el fkequipo
             }
             return { etapaData: etapaPrincipal, fkequipo: null };         } catch (err) {
             setError(err.message);
@@ -85,7 +85,7 @@ export const useEtapa = () => {
         }
     }
 
-    // Función para crear una nueva etapa
+    // Función para crear una nueva planta
     async function postEtapa(fkprocesoId, nuevaEtapa) {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/registro/`, {
@@ -106,13 +106,13 @@ export const useEtapa = () => {
             }
 
             const data = await response.json();
-            return data; // Retorna la nueva etapa creada
+            return data; // Retorna la nueva planta creada
         } catch (err) {
             setError(err.message);
         }
     }
 
-    // Función para actualizar una etapa existente
+    // Función para actualizar una planta existente
     async function putEtapa(fkEtapaId, estado) {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/${fkEtapaId}/`, {
@@ -129,7 +129,7 @@ export const useEtapa = () => {
             }
 
             const data = await response.json();
-            return data; // Retorna la etapa actualizada
+            return data; // Retorna la planta actualizada
         } catch (err) {
             setError(err.message);
         }
