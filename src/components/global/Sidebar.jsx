@@ -2,6 +2,7 @@ import {useState, useContext, createContext} from "react";
 import {Button, ButtonGroup} from "@nextui-org/react";
 import {ChevronFirst, ChevronLast} from "lucide-react";
 import './Sidebar.css';
+import {useNavigate} from "react-router-dom";
 const SidebarContext = createContext()
 
 export default function Sidebar({ children }) {
@@ -34,10 +35,15 @@ export default function Sidebar({ children }) {
     );
 }
 
-export function SidebarItem({ icon, text, active, alert }) {
+export function SidebarItem({ icon, text, active, alert, path }) {
     const {expanded} = useContext(SidebarContext);
+    const navigate = useNavigate(); // Usa useNavigate para navegar
+    const handleClick = () => {
+        navigate(path); // Navega a la ruta especificada
+    };
     return(
         <li
+            onClick={handleClick}
             className={`
                 relative flex items-center py-2 px-3 my-2 
                 font-medium rounded-md cursor-pointer 

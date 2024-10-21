@@ -6,7 +6,7 @@ function BreadcrumbSection() {
 
     return (
         <Breadcrumbs variant="solid" className="p-3">
-            <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
+            <BreadcrumbItem onPress={() => navigate(`/Proceso`)}>Proceso</BreadcrumbItem>
             <BreadcrumbItem onPress={() => navigate(-1)}>Panel Proceso</BreadcrumbItem>
             <BreadcrumbItem>Panel Etapa</BreadcrumbItem>
         </Breadcrumbs>

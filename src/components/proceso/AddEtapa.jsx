@@ -16,7 +16,11 @@ export default function AddEtapa({ isOpen, onClose, backdrop, setBackdrop, onAdd
 
         return `${twoDigits(hour)}:${twoDigits(minute)}:${twoDigits(second)}`;
     };
+<<<<<<< HEAD
     // Manejar el evento de agregar etapa
+=======
+    // Manejar el evento de agregar planta
+>>>>>>> a31d2b8e73a946d2baa8ef053ee3157b317b84e4
     const handleAdd = () => {
         const duracionFormatted = formatTime(duracion.hour, duracion.minute, duracion.second);
         const nuevaEtapa = {
@@ -25,7 +29,7 @@ export default function AddEtapa({ isOpen, onClose, backdrop, setBackdrop, onAdd
             duracion: duracionFormatted,
         };
 
-        console.log("Nueva etapa agregada:", nuevaEtapa);
+        console.log("Nueva planta agregada:", nuevaEtapa);
 
         if (typeof onAddEtapa === 'function') {
             onAddEtapa(nuevaEtapa); // Verifica que onAddEtapa sea una función
@@ -53,12 +57,12 @@ export default function AddEtapa({ isOpen, onClose, backdrop, setBackdrop, onAdd
             <ModalContent>
                 {(onClose) => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">Añadir Procesos</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1">Añadir Etapas</ModalHeader>
                         <ModalBody>
                             <Input
                                 autoFocus
                                 label="Nombre"
-                                placeholder="Ingresa el nombre de la Etapa"
+                                placeholder="Ingresa el nombre de la Planta"
                                 variant="bordered"
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)} // Maneja el cambio en el input
@@ -69,12 +73,12 @@ export default function AddEtapa({ isOpen, onClose, backdrop, setBackdrop, onAdd
                                 isSelected={activo} // Usa el estado del switch
                                 onChange={() => setActivo(!activo)} // Alterna el estado al cambiar
                             >
-                                Estado de la Etapa
+                                Estado de la Planta
                             </Switch>
 
                             <TimeInput
                                 label="Duracion"
-                                description="Duracion de la Etapa"
+                                description="Duracion de la Planta"
                                 hourCycle="24"
                                 granularity="second"
                                 onChange={(value) => {
@@ -87,7 +91,7 @@ export default function AddEtapa({ isOpen, onClose, backdrop, setBackdrop, onAdd
                                 Cerrar
                             </Button>
                             <Button color="secondary" onPress={handleAdd}>
-                                Agregar Etapa
+                                Agregar Planta
                             </Button>
                         </ModalFooter>
                     </>

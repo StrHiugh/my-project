@@ -27,7 +27,8 @@ export default function PanelProcess() {
     const {fetchEtapa} = useEtapa();
     const {postEtapa} = useEtapa();
     const location = useLocation(); // Para obtener el nombre del proceso
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
 
     // Obtener el nombre del proceso del estado (si está disponible)
     const nombreProceso = location.state?.nombre || 'Desconocido';
@@ -44,7 +45,7 @@ export default function PanelProcess() {
                 console.error("Los datos obtenidos no son un array válido:", data);
             }
         } catch (error) {
-            console.error("Error al obtener los datos de etapa:", error);
+            console.error("Error al obtener los datos de planta:", error);
         }
     };
 
@@ -59,11 +60,11 @@ export default function PanelProcess() {
         console.log("nuevaEtapa:", nuevaEtapa); // Verifica el contenido de nuevaEtapa
         try {
             const data = await postEtapa(fkProcesoId, nuevaEtapa);
-            console.log("Nueva etapa creada:", data);
+            console.log("Nueva planta creada:", data);
             await obtenerDatosProcess();  // Reutiliza la función que obtienes los datos
 
         } catch (error) {
-            console.error("Error al agregar la etapa:", error);
+            console.error("Error al agregar la planta:", error);
         }
     };
 
@@ -87,16 +88,14 @@ export default function PanelProcess() {
             case "duration":
                 return item.duracion;
             case "actions":
-                return <Button color="secondary" onPress={() => navigate(`/PanelEtapa/${item.id}`)}>Entrar</Button>;
+                return <Button color="secondary" onPress={() => navigate(`/PanelEtapa/${item.id}`, { state: { fkProcesoId } })}>Entrar</Button>;
             default:
                 return null;
         }
     };
 
-    // Paginación para etapas
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8; // Elementos por página
-    const totalPages = Math.ceil((etapas?.length || 0) / itemsPerPage);
+    // Paginación para panelprocess
+    const totalPages = Math.ceil(etapas?.length / itemsPerPage);
 
     // Asegúrate de que etapas es un array
     const paginatedData = Array.isArray(etapas) ? etapas.slice(
@@ -125,7 +124,7 @@ export default function PanelProcess() {
 
         <div>
             <Breadcrumbs variant="solid">
-                <BreadcrumbItem onPress={() => navigate(`/`)}>Proceso</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(`/Proceso`)}>Proceso</BreadcrumbItem>
                 <BreadcrumbItem>Panel Proceso</BreadcrumbItem>
             </Breadcrumbs>
             {topContent}

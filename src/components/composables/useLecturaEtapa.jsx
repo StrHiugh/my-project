@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-// Hook personalizado para obtener lecturas de etapa
+// Hook personalizado para obtener lecturas de planta
 export function useLecturaEtapa() {
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
     const token = 'cfc8340bc8d44383934ef380d4a9f71c26305ad6';
 
-    // Función para obtener las lecturas por etapa
+    // Función para obtener las lecturas por planta
     async function fetchLectura(fkEtapaId) {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/lectura/?fkEtapa=${fkEtapaId}`, {

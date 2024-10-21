@@ -21,8 +21,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Blocks, CheckIcon,} from "lucide-react";
 import {useEtapa} from "../composables/useEtapa.jsx";
 import {useSeccionEquipo} from "../composables/useEquipoSeccion.jsx";
-import GaugeRadial from "../charts/GaugeRadial.jsx";
-import AreaGraphic from "../charts/AreaGraphic.jsx";
 import {useLecturaEtapa} from "../composables/useLecturaEtapa.jsx";
 import "./PanelEtapa.css"
 import ChipStatus from "./ChipStatus.jsx";
@@ -30,7 +28,7 @@ import BreadcrumbSection from "./BreadcrumSection.jsx";
 import SensorTable from "./SensorTable.jsx";
 import LecturaTable from "./LecturaTable.jsx";
 import GraphicsTab from "./GraphicsTab.jsx";
-import CompositionExample from "../charts/GaugeRadial.jsx";
+import { useLocation } from 'react-router-dom';
 
 export default function PanelEtapa() {
     const navigate = useNavigate();
@@ -43,22 +41,25 @@ export default function PanelEtapa() {
     const [etapaHora, setEtapaHora] = useState(null);
     const [estatus, setEtapaEstatus] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-
+    const location = useLocation();
+    const fkProcesoId = location.state?.fkProcesoId;
     const {fetchEtapaId} = useEtapa();
     const {putEtapa} = useEtapa();
     const {equipoData} = useSeccionEquipo(fkequipo);
     const {fetchLectura} = useLecturaEtapa();
 
-    // Función para obtener los datos de la etapa
+    console.log("fk del proceso en planta: ", fkProcesoId);
+
+    // Función para obtener los datos de la planta
     const obtenerDatosEtapa = async () => {
         if (!fkEtapaId) return; // evita la llamada si fkEtapaId es null o undefined
         try {
             const {fkequipo, etapaNombre, duracion, created, hora, estatus} = await fetchEtapaId(fkEtapaId);
             console.log("ID de equipo:", fkequipo);
-            console.log("Nombre de la etapa", etapaNombre);
-            console.log("Nombre de la etapa", duracion);
-            console.log("Nombre de la etapa", created);
-            console.log("Nombre de la etapa", hora);
+            console.log("Nombre de la planta", etapaNombre);
+            console.log("Nombre de la planta", duracion);
+            console.log("Nombre de la planta", created);
+            console.log("Nombre de la planta", hora);
 
             if (fkequipo) {
                 setFkequipo(fkequipo); // fk equipo
@@ -79,7 +80,7 @@ export default function PanelEtapa() {
                 setEtapaEstatus(estatus); // estatus del proceso
             }
         } catch (error) {
-            console.error("Error al obtener los datos de etapa:", error);
+            console.error("Error al obtener los datos de planta:", error);
         }
     };
 
@@ -172,7 +173,7 @@ export default function PanelEtapa() {
 
     // Paginación para lecturas
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Elementos por página
+    const itemsPerPage = 8; // Elementos por página
 
     const totalPages = Math.ceil((allLecturaData?.length || 0) / itemsPerPage);
 
@@ -188,14 +189,14 @@ export default function PanelEtapa() {
 
     // Paginación para equipo
     const [currentPageEquipo, setCurrentPageEquipo] = useState(1);
-    const itemsPerPageEquipo = 10;
+    const itemsPerPageEquipo = 8;
 
     const totalPagesEquipo = Math.ceil((equipoData?.length || 0) / itemsPerPageEquipo);
 
-    const paginatedEquipoData = (equipoData || []).slice(
+    const paginatedEquipoData = Array.isArray(equipoData) ? equipoData.slice(
         (currentPageEquipo - 1) * itemsPerPageEquipo,
         currentPageEquipo * itemsPerPageEquipo
-    );
+    ): [];
 
     const handlePageChangeEquipo = (page) => {
         setCurrentPageEquipo(page);
@@ -229,8 +230,18 @@ export default function PanelEtapa() {
                     <Button
                         color="secondary"
                         endContent={<Blocks />}
+<<<<<<< HEAD
                     >
                         uhasdj
+=======
+                        onPress={async () => {
+                            const nuevoEstado = estatus === 1 ? 2 : 1;
+                            await putEtapa(fkEtapaId, nuevoEstado);
+                            setEtapaEstatus(nuevoEstado);
+                        }}
+                    >
+                        {estatus === 1 ? "Pausar" : "Activar"}
+>>>>>>> a31d2b8e73a946d2baa8ef053ee3157b317b84e4
                     </Button>
                 </div>
             </div>
