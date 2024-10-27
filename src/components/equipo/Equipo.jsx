@@ -14,6 +14,7 @@ import {
 import {Plus} from "lucide-react";
 import AddProceso from "../proceso/AddProceso.jsx";
 import {useNavigate} from "react-router-dom";
+import AddEquipo from "./AddEquipo.jsx";
 
 export default function Equipo() {
     const {equipos, setEquipos, fetchEquipos, postEquipos} = useEquipo(); // Obtiene equipos y error
@@ -22,6 +23,35 @@ export default function Equipo() {
     const navigate = useNavigate();
 
     console.log(equipos);
+
+
+    // Función para obtener los equipos usando el hook
+    const getEquipos = async () => {
+        try {
+            const data = await fetchEquipos(); // Usa el hook para obtener los equipos
+        } catch (error) {
+            console.log("Error:" + error.message);
+        }
+    };
+
+    // Llamada a getEquipos dentro de useEffect para cargar los equipos al montar el componente
+    useEffect(() => {
+        getEquipos();
+    }, []);
+
+    const handleAddEquipo = async (nuevoEquipo) => {
+        console.log("nuevo proceso:", nuevoEquipo); // Verifica el contenido de nuevaEtapa
+        try {
+            const data = await postEquipos(nuevoEquipo);
+            console.log("Nuevo proceso creado:", data);
+            await getEquipos();  // Reutiliza la función que obtienes los datos
+
+        } catch (error) {
+            console.error("Error al agregar el proceso", error);
+        }
+    };
+
+
 
     const columns = [
         {name: "ID", uid: "id"},
@@ -42,7 +72,7 @@ export default function Equipo() {
             case "planta":
                 return item.fkplanta_nombre;
             case "actions":
-                return <Button color="secondary">Ver</Button>;
+                return <Button color="secondary" onPress={() => navigate(`/PanelEquipo/${item.id}`)}>Ver</Button>;
             default:
                 return null;
         }
@@ -114,11 +144,13 @@ export default function Equipo() {
                     </div>
                 </CardBody>
             </Card>
-            <AddProceso
+            <AddEquipo
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}
                 backdrop={modalBackdrop}
                 setBackdrop={setModalBackdrop}
+                onAddEquipo={handleAddEquipo} // Pasa la función al modal
+
 
             />
         </div>

@@ -11,6 +11,8 @@ import Equipo from "./components/equipo/Equipo.jsx";
 import Planta from "./components/planta/Planta.jsx";
 import Producto from "./components/producto/Producto.jsx";
 import Sensores from "./components/sensores/Sensores.jsx";
+import PanelEquipo from "./components/equipo/PanelEquipo.jsx";
+import SeccionSensor from "./components/equipo/SeccionSensor.jsx";
 
 function App() {
     return (
@@ -51,6 +53,8 @@ function AppContent() {
                         <Route path="/PanelEtapa/:fkEtapaId" element={<PanelEtapa />} />
                         {/* Equipo */}
                         <Route path="/Equipo" element={<Equipo />} />
+                        <Route path="/PanelEquipo/:fkEquipoId" element={<PanelEquipo/>} />
+                        <Route path="/SeccionSensor/:fkSensorId" element={<SeccionSensor/>} />
                         {/* Planta */}
                         <Route path="/Planta" element={<Planta />} />
                         {/* Producto */}
