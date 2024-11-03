@@ -10,7 +10,7 @@ export default function GraphicsTab({ phData, oxigenoData, tempData, recargarDat
                 <h2 className="panel">Proceso Actual: {etapaNombre}</h2>
             </CardHeader>
             <CardBody>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
                     <div>
                         {isLoading ? (
                             <div className="flex justify-center items-center">

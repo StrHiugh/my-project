@@ -127,7 +127,6 @@ export default function PanelEtapa() {
     const oxigenoData = lastData.find(sensor => sensor.sensorId === '8');
     const tempData = lastData.find(sensor => sensor.sensorId === '9');
 
-
     const columns = [
         {name: "ID", uid: "id"},
         {name: "Nombre", uid: "name"},

@@ -90,7 +90,7 @@ const GaugeRadial = ({ labels, series, labelColor, sensorType }) => {
                     name: {
                         fontSize: '20px',
                         color: labelColor,
-                        offsetY: 120
+                        offsetY:85
                     },
                     value: {
                         offsetY: 15,
