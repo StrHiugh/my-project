@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 
 // Hook personalizado para obtener lecturas de planta
 export function useLecturaEtapa() {
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
+    const [dataGeneral, setDataGeneral] = useState(null);
     const token = 'cfc8340bc8d44383934ef380d4a9f71c26305ad6';
-
+    const [groupedDataG, setGroupedDataG] = useState(null);
     // Función para obtener las lecturas por planta
     async function fetchLectura(fkEtapaId) {
         try {
@@ -52,6 +53,57 @@ export function useLecturaEtapa() {
         }
     }
 
+    // Función para obtener todas las lecturas
+    async function fetchLecturaGeneral() {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/lectura/`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Token ${token}`,
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al consumir la API');
+            }
+
+            const data = await response.json();
+            setDataGeneral(data.results);
+
+            // Agrupar datos por sensorId
+
+            const groupedData = data.results.reduce((acc, item) => {
+                const sensorId = item.fkESeccionEquipoSensor.id; // Acceder al ID del sensor
+                if (!acc[sensorId]) {
+                    acc[sensorId] = [];
+                }
+                acc[sensorId].push(item); // Añadir el dato a la agrupación correspondiente
+                return acc;
+            }, {});
+            setGroupedDataG(groupedData);
+
+
+            // Hacer la petición específica para cada sensorId
+            for (const sensorId in groupedDataG) {
+                if (Object.prototype.hasOwnProperty.call(groupedDataG, sensorId)) {
+                    console.log(`Realizando petición para sensorId: ${sensorId}`);
+
+                    // Ahora, haces la petición específica para este sensorId
+                    const sensorData = await fetchLecturaEquipo(sensorId); // Eliminar fkEtapaId de aquí
+                    console.log(`Datos obtenidos para sensor ${sensorId}:`, sensorData);
+                }
+            }
+
+            return groupedData;
+        } catch (err) {
+            setError(err.message);
+            console.error("Error en fetchLecturaGeneral:", err); // Registro adicional
+        }
+    }
+
+    useEffect(() => {
+        fetchLecturaGeneral().catch(err => console.error("Error en fetchLecturaGeneral:", err));
+    }, []);
 
 
     // Función para obtener lecturas de un equipo específico
@@ -80,8 +132,11 @@ export function useLecturaEtapa() {
 
     return {
         data,
+        dataGeneral,
         error,
         fetchLectura,
-        fetchLecturaEquipo
+        fetchLecturaGeneral,
+        fetchLecturaEquipo,
+        groupedDataG
     };
 }
