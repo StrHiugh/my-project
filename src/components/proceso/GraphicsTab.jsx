@@ -67,7 +67,7 @@ export default function GraphicsTab({ phData, oxigenoData, tempData, recargarDat
                         <AreaGraphic
                             key={sensorId}
                             lecturaDatas={data}
-                            sensorName={data[0]?.fkESeccionEquipoSensor?.fkseccionEquipo_nombre || "Sensor Desconocido"}
+                            sensorName={data[0]?.fkESeccionEquipoSensor?.fksensor_nombre || "Sensor Desconocido"}
                         />
                     ))}
                 </div>

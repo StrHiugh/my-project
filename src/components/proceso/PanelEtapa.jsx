@@ -123,9 +123,9 @@ export default function PanelEtapa() {
     console.log(lastData);
 
     //datos de los sensores
-    const phData = lastData.find(sensor => sensor.sensorId === '13');
-    const oxigenoData = lastData.find(sensor => sensor.sensorId === '8');
-    const tempData = lastData.find(sensor => sensor.sensorId === '9');
+    const phData = lastData.find(sensor => sensor.sensorId === '22');
+    const oxigenoData = lastData.find(sensor => sensor.sensorId === '20');
+    const tempData = lastData.find(sensor => sensor.sensorId === '21');
 
     const columns = [
         {name: "ID", uid: "id"},
@@ -164,7 +164,7 @@ export default function PanelEtapa() {
             case "value":
                 return item.valor;
             case "sensor":
-                return item.fkESeccionEquipoSensor.fkseccionEquipo_nombre;
+                return item.fkESeccionEquipoSensor.fksensor_nombre;
             default:
                 return null;
         }

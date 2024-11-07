@@ -54,9 +54,9 @@ export default function Dashboard() {
     console.log(lastData);
 
     //datos de los sensores
-    const phData = lastData.find(sensor => sensor.sensorId === '13');
-    const oxigenoData = lastData.find(sensor => sensor.sensorId === '8');
-    const tempData = lastData.find(sensor => sensor.sensorId === '9');
+    const phData = lastData.find(sensor => sensor.sensorId === '22');
+    const oxigenoData = lastData.find(sensor => sensor.sensorId === '20');
+    const tempData = lastData.find(sensor => sensor.sensorId === '21');
 
 
     return (
@@ -132,29 +132,29 @@ export default function Dashboard() {
                                     ) : (
                                     <Tabs key="underlined" variant="underlined" aria-label="Tabs variants">
                                         <Tab key="photos" title="Oxigeno">
-                                            {lecturaDatas[8] && (
+                                            {lecturaDatas[20] && (
                                                 <AreaGraphic
-                                                    key={8}
-                                                    lecturaDatas={lecturaDatas[8]}
-                                                    sensorName={lecturaDatas[8][0]?.fkESeccionEquipoSensor?.fkseccionEquipo_nombre || "Sensor 8"}
+                                                    key={20}
+                                                    lecturaDatas={lecturaDatas[20]}
+                                                    sensorName={lecturaDatas[20][0]?.fkESeccionEquipoSensor?.fksensor_nombre || "Sensor 8"}
                                                 />
                                             )}
                                         </Tab>
                                         <Tab key="music" title="Temperatura">
-                                            {lecturaDatas[9] && (
+                                            {lecturaDatas[21] && (
                                                 <AreaGraphic
-                                                    key={9}
-                                                    lecturaDatas={lecturaDatas[9]}
-                                                    sensorName={lecturaDatas[9][0]?.fkESeccionEquipoSensor?.fkseccionEquipo_nombre || "Sensor 8"}
+                                                    key={21}
+                                                    lecturaDatas={lecturaDatas[21]}
+                                                    sensorName={lecturaDatas[21][0]?.fkESeccionEquipoSensor?.fksensor_nombre || "Sensor 8"}
                                                 />
                                             )}
                                         </Tab>
                                         <Tab key="videos" title="pH">
-                                            {lecturaDatas[13] && (
+                                            {lecturaDatas[22] && (
                                                 <AreaGraphic
-                                                    key={13}
-                                                    lecturaDatas={lecturaDatas[13]}
-                                                    sensorName={lecturaDatas[13][0]?.fkESeccionEquipoSensor?.fkseccionEquipo_nombre || "Sensor 8"}
+                                                    key={22}
+                                                    lecturaDatas={lecturaDatas[22]}
+                                                    sensorName={lecturaDatas[22][0]?.fkESeccionEquipoSensor?.fksensor_nombre || "Sensor 8"}
                                                 />
                                             )}
                                         </Tab>
