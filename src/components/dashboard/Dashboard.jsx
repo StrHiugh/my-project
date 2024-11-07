@@ -166,7 +166,7 @@ export default function Dashboard() {
                     ))}
                 </Tabs>
                 </div>
-                <Button auto color="secondary" onClick={() => recargarDatosSensores()}>
+                <Button auto color="secondary" onClick={() => recargarDatosSensores()} className="ml-[-137px]">
                     Recargar Datos
                 </Button>
 
