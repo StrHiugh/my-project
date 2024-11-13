@@ -3,6 +3,7 @@ import {
 } from "@nextui-org/react";
 import GaugeRadial from "../charts/GaugeRadial.jsx";
 import AreaGraphic from "../charts/AreaGraphic.jsx";
+import StackedGraphic from "../charts/StackedGraphic.jsx";
 import {useLecturaEtapa} from "../composables/useLecturaEtapa.jsx";
 import {useEffect, useState} from "react";
 import {usePlanta} from "../composables/usePlanta.jsx";
@@ -131,30 +132,11 @@ export default function Dashboard() {
                                         </div>
                                     ) : (
                                     <Tabs key="underlined" variant="underlined" aria-label="Tabs variants">
-                                        <Tab key="photos" title="Oxigeno">
-                                            {lecturaDatas[20] && (
-                                                <AreaGraphic
-                                                    key={20}
-                                                    lecturaDatas={lecturaDatas[20]}
-                                                    sensorName={lecturaDatas[20][0]?.fkESeccionEquipoSensor?.fksensor_nombre || "Sensor 8"}
-                                                />
-                                            )}
-                                        </Tab>
-                                        <Tab key="music" title="Temperatura">
-                                            {lecturaDatas[21] && (
-                                                <AreaGraphic
-                                                    key={21}
-                                                    lecturaDatas={lecturaDatas[21]}
-                                                    sensorName={lecturaDatas[21][0]?.fkESeccionEquipoSensor?.fksensor_nombre || "Sensor 8"}
-                                                />
-                                            )}
-                                        </Tab>
-                                        <Tab key="videos" title="pH">
-                                            {lecturaDatas[22] && (
-                                                <AreaGraphic
-                                                    key={22}
-                                                    lecturaDatas={lecturaDatas[22]}
-                                                    sensorName={lecturaDatas[22][0]?.fkESeccionEquipoSensor?.fksensor_nombre || "Sensor 8"}
+                                        <Tab key="datos" title="Datos de Sensores">
+                                            {lecturaDatas && (
+                                                <StackedGraphic
+                                                    lecturaDatas={lecturaDatas}
+                                                    sensorName={lecturaDatas?.fkESeccionEquipoSensor?.fksensor_nombre || "Sensor #"}
                                                 />
                                             )}
                                         </Tab>
