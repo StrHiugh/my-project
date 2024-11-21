@@ -4,6 +4,7 @@ import {useState, useCallback, useEffect} from 'react';
 export function useProducto() {
     const [productos, setProductos] = useState(null);
     const [error, setError] = useState(null);
+    const [valores, setValores] = useState([]);
 
     // Función para obtener productos (GET)
     const fetchProducto = useCallback(async () => {
@@ -30,7 +31,7 @@ export function useProducto() {
     }, []); // Dependencias para volver a cargar cuando cambian iduser o token
 
     // Función para crear un nuevo producto (POST)
-    const postProducto = useCallback(async (producto) => {
+    const postProducto = useCallback(async (nuevoProduto) => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/producto/registro/`, {
                 method: 'POST',
@@ -39,11 +40,12 @@ export function useProducto() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    nombre: producto.nombre,
-                    descripcion: producto.descripcion || null,
-                    usuario: producto.usuario || null,
-                    fotografia: producto.fotografia,
-                    valores: producto.valores.map(valor => ({
+                    nombre: nuevoProduto.nombre,
+                    descripcion: nuevoProduto.descripcion || null,
+                    usuario: nuevoProduto.usuario_id,
+                    fotografia: nuevoProduto.fotografia || null,
+                    etapa: nuevoProduto.etapa || null,
+                    valores: nuevoProduto.valores.map(valor => ({
                         nombre: valor.nombre,
                         valorMaximo: valor.valorMaximo || null,
                         valorMinimo: valor.valorMinimo || null,
@@ -76,11 +78,11 @@ export function useProducto() {
             }
 
             const data = await response.json();
-            return data;
+            setValores(data);  // Guarda los datos obtenidos en el estado
         } catch (err) {
-            setError(err.message);
+            setError(err.message);  // Manejo de errores
         }
-    }, []);
+    }, []);  // Dependencias vacías para que solo se defina una vez
 
     return {
         productos,

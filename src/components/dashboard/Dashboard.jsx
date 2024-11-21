@@ -10,13 +10,8 @@ import {usePlanta} from "../composables/usePlanta.jsx";
 
 export default function Dashboard() {
     const {
-        data,
-        dataGeneral,
-        error,
         fetchLectura,
         fetchLecturaGeneral,
-        fetchLecturaEquipo,
-        groupedDataG
     } = useLecturaEtapa();
     const [lecturaDatas, setLecturaData] = useState([]);
     const [lecturaPlantas, setlecturaPlantas] = useState([]);
@@ -113,19 +108,7 @@ export default function Dashboard() {
                                     )}
                                 </Card></div>
 
-
-                                <div className="col-start-3 row-start-2 mt-[-100px]"><Card className="p-4">
-                                    <h2>s</h2>
-                                </Card></div>
-                                <div className="col-start-3 row-start-3 mt-[-325px]"><Card className="p-4">
-                                    <h2>s</h2>
-                                </Card></div>
-                                <div className="col-start-3 row-start-4 mt-[-550px]"><Card className="p-4">
-                                    <h2>s</h2>
-                                </Card></div>
-
-
-                                <div className="col-span-2 row-start-2 mt-[-100px]"><Card>
+                                <div className="col-span-3 row-span-3"><Card>
                                     {isLoading ? (
                                         <div className="flex justify-center items-center">
                                             <Spinner color="secondary" />

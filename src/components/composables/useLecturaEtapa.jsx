@@ -83,13 +83,13 @@ export function useLecturaEtapa() {
             setGroupedDataG(groupedData);
 
 
-            // Hacer la petición específica para cada sensorId
-            for (const sensorId in groupedDataG) {
-                if (Object.prototype.hasOwnProperty.call(groupedDataG, sensorId)) {
-                    console.log(`Realizando petición para sensorId: ${sensorId}`);
+            // Ahora, usar groupedData en lugar de groupedDataG en el ciclo for
+            for (const sensorId in groupedData) {
+                if (Object.prototype.hasOwnProperty.call(groupedData, sensorId)) {
+                    console.log(`Realizando petición para sensorId: ${sensorId} y etapaId: ${groupedData[sensorId][0].fkEtapa}`);
 
-                    // Ahora, haces la petición específica para este sensorId
-                    const sensorData = await fetchLecturaEquipo(sensorId); // Eliminar fkEtapaId de aquí
+                    // Hacer la petición específica para este sensorId y etapaId
+                    const sensorData = await fetchLecturaEquipo(groupedData[sensorId][0].fkEtapa, sensorId); // Enviar el etapaId y el sensorId
                     console.log(`Datos obtenidos para sensor ${sensorId}:`, sensorData);
                 }
             }

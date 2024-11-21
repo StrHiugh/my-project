@@ -14,6 +14,7 @@ import {Plus} from "lucide-react";
 import AddProceso from "../proceso/AddProceso.jsx";
 import {useNavigate} from "react-router-dom";
 import {useProducto} from "../composables/useProducto.jsx";
+import AddProducto from "./AddProducto.jsx";
 
 export default function Producto() {
     const {productos, fetchProducto, postProducto} = useProducto(); // Obtiene equipos y error
@@ -23,11 +24,25 @@ export default function Producto() {
 
     console.log(productos);
 
+    const handleAddProducto = async (nuevoProducto) => {
+        console.log("nuevo producto:", nuevoProducto); // Verifica el contenido de nuevaEtapa
+        try {
+            const data = await postProducto(nuevoProducto);
+            console.log("Nuevo producto creado:", data);
+            await fetchProducto();
+            setModalOpen(false);
+
+        } catch (error) {
+            console.error("Error al agregar el proceso", error);
+        }
+    };
+
+
+
     const columns = [
         {name: "ID", uid: "id"},
         {name: "Nombre", uid: "name"},
         {name: "Descripcion", uid: "descripcion"},
-        {name: "Acciones", uid: "actions"},
     ];
 
     const renderCell = (item, columnKey) => {
@@ -38,8 +53,6 @@ export default function Producto() {
                 return item.nombre;
             case "descripcion":
                 return item.descripcion;
-            case "actions":
-                return <Button color="secondary">Ver</Button>;
             default:
                 return null;
         }
@@ -108,11 +121,13 @@ export default function Producto() {
                     </div>
                 </CardBody>
             </Card>
-            <AddProceso
+            <AddProducto
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}
                 backdrop={modalBackdrop}
                 setBackdrop={setModalBackdrop}
+                onAddProducto={handleAddProducto} // Pasa la función al modal
+
 
             />
         </div>
