@@ -14,8 +14,10 @@ import {
     Avatar
 } from "@nextui-org/react";
 import {Switch} from "@nextui-org/react";
+import {useNavigate} from "react-router-dom";
 
 const Topbar = () => {
+        const navigate = useNavigate();
 
 return (
 
@@ -45,7 +47,7 @@ return (
                         <p className="font-semibold">zoey@example.com</p>
                     </DropdownItem>
                     <DropdownItem key="settings">My Settings</DropdownItem>
-                    <DropdownItem key="logout" color="danger">
+                    <DropdownItem key="logout" color="danger" onPress={() => navigate(`/Login`)}>
                         Log Out
                     </DropdownItem>
                 </DropdownMenu>

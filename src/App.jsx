@@ -13,6 +13,7 @@ import Producto from "./components/producto/Producto.jsx";
 import Sensores from "./components/sensores/Sensores.jsx";
 import PanelEquipo from "./components/equipo/PanelEquipo.jsx";
 import SeccionSensor from "./components/equipo/SeccionSensor.jsx";
+import Login from "./components/login/Login.jsx";
 
 function App() {
     return (
@@ -25,6 +26,14 @@ function App() {
 function AppContent() {
     const location = useLocation(); // Obtén la ubicación actual
 
+    // Si la ubicación actual es "/Login", renderiza solo el componente Login
+    if (location.pathname === "/Login") {
+        return (
+            <div className="App flex items-center justify-center h-screen">
+                <Login />
+            </div>
+        );
+    }
     return (
         <div className="App flex">
             {/* Sidebar */}

@@ -1,0 +1,8 @@
+/* Estilo para Login */
+#root.login-screen {
+    max-width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(120, 40, 199, 0.42);
+}
