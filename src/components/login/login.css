@@ -1,8 +1,28 @@
-/* Estilo para Login */
+/* Asegura que el contenedor de login cubra toda la pantalla */
 #root.login-screen {
-    max-width: 100%;
-    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw; /* Abarca todo el ancho */
+    height: 100vh; /* Abarca toda la altura */
+    overflow: hidden;
     margin: 0;
     padding: 0;
-    background-color: rgba(120, 40, 199, 0.42);
+}
+
+/* Estilo para el fondo Lumiflex */
+.background{
+    position: absolute; /* Fija el fondo detrás del contenido */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ocupa todo el ancho */
+    height: 100%; /* Ocupa toda la altura */
+    z-index: -1; /* Envía el fondo detrás */
+}
+
+/* Estilo para la tarjeta de login */
+.login {
+    position: relative; /* Mantiene el contenido sobre el fondo */
+    z-index: 1; /* Prioriza el contenido */
+    left: 430px;
 }

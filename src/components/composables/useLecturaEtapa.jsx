@@ -5,8 +5,9 @@ export function useLecturaEtapa() {
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
     const [dataGeneral, setDataGeneral] = useState(null);
-    const token = 'cfc8340bc8d44383934ef380d4a9f71c26305ad6';
     const [groupedDataG, setGroupedDataG] = useState(null);
+    const token = localStorage.getItem('token');
+
     // Función para obtener las lecturas por planta
     async function fetchLectura(fkEtapaId) {
         try {

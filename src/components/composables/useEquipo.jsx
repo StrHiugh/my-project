@@ -4,13 +4,14 @@ import {useCallback, useEffect, useState} from 'react';
 export function useEquipo() {
     const [equipos, setEquipos] = useState([]);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem('token');
 
     // Método para obtener equipos (GET)
     const fetchEquipos = useCallback(async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/equipo/`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 
@@ -19,6 +20,7 @@ export function useEquipo() {
             }
 
             const data = await response.json();
+            console.log(token)
             setEquipos(data.results);
             return data.results; // Devuelve solo las etapas si no hay fkequipo
 
@@ -34,7 +36,7 @@ export function useEquipo() {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/equipo/registro/`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(equipo),

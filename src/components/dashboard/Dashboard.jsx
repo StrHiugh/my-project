@@ -9,10 +9,7 @@ import {useEffect, useState} from "react";
 import {usePlanta} from "../composables/usePlanta.jsx";
 
 export default function Dashboard() {
-    const {
-        fetchLectura,
-        fetchLecturaGeneral,
-    } = useLecturaEtapa();
+    const {fetchLectura, fetchLecturaGeneral,} = useLecturaEtapa();
     const [lecturaDatas, setLecturaData] = useState([]);
     const [lecturaPlantas, setlecturaPlantas] = useState([]);
     const [isLoading, setIsLoading] = useState(false);

@@ -6,6 +6,7 @@ export function useSeccionEquipo(fkequipo) {
     const [equipoData, setEquipoData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem('token');
 
     const fetchSeccionEquipo = useCallback(async () => {
         setLoading(true);
@@ -14,7 +15,7 @@ export function useSeccionEquipo(fkequipo) {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/seccionEquipo/?fkequipo=${fkequipo}`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 

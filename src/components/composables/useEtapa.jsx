@@ -6,13 +6,14 @@ export const useEtapa = () => {
     const [etapaDetail, setEtapaDetail] = useState(null);  // Para almacenar los datos de fetchEtapaid
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem('token');
 
     // Función para obtener etapas por fkProcesoId
     async function fetchEtapa(fkProcesoId) {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/?fkProceso=${fkProcesoId}`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 
@@ -36,7 +37,7 @@ export const useEtapa = () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/?id=${fkEtapaId}`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 
@@ -91,7 +92,7 @@ export const useEtapa = () => {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/registro/`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -118,7 +119,7 @@ export const useEtapa = () => {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/etapa/${fkEtapaId}/`, {
                 method: 'PUT',
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({activo: estado }) // Envía el nuevo estado

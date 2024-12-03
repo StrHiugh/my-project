@@ -4,13 +4,14 @@ import {useState, useCallback, useEffect} from 'react';
 export function useSensores() {
     const [sensores, setSensores] = useState(null);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem('token');
 
     // Función para obtener los sensores
     const fetchSensor = useCallback(async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/sensor/`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 

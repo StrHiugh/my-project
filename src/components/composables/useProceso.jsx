@@ -1,13 +1,15 @@
 // hooks/useProceso.js
 
-export function useProceso() {
 
+
+export function useProceso() {
+    const token = localStorage.getItem('token');
     // Método para obtener procesos (GET)
     const fetchProceso = async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/proceso/`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 
@@ -29,7 +31,7 @@ export function useProceso() {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/proceso/registro/`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(proceso),

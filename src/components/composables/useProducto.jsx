@@ -5,13 +5,14 @@ export function useProducto() {
     const [productos, setProductos] = useState(null);
     const [error, setError] = useState(null);
     const [valores, setValores] = useState([]);
+    const token = localStorage.getItem('token');
 
     // Función para obtener productos (GET)
     const fetchProducto = useCallback(async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/producto/`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 
@@ -36,7 +37,7 @@ export function useProducto() {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/producto/registro/`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -69,7 +70,7 @@ export function useProducto() {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/valoresproducto/?producto=${idProducto}`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 

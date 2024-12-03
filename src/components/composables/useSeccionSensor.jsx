@@ -3,8 +3,8 @@ import {useEffect, useState} from 'react';
 export function useSeccionSensor(fkseccionEquipo) {
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
-    const token = 'cfc8340bc8d44383934ef380d4a9f71c26305ad6'; // Reemplaza esto con tu token de autenticación
     const apiUrl = 'http://127.0.0.1:8000'; // Reemplaza esto con la URL base de tu API
+    const token = localStorage.getItem('token');
 
     async function fetchSeccionSensor() {
         try {
