@@ -1,11 +1,12 @@
 // hooks/useEquipo.js
 import {useCallback, useEffect, useState} from 'react';
+import {useAuth} from "./useAuth.jsx";
 
 export function useEquipo() {
     const [equipos, setEquipos] = useState([]);
     const [error, setError] = useState(null);
-    const token = localStorage.getItem('token');
-
+    const { getToken } = useAuth();
+    const token = getToken();
     // Método para obtener equipos (GET)
     const fetchEquipos = useCallback(async () => {
         try {
