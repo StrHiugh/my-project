@@ -48,18 +48,13 @@ export default function PanelEtapa() {
     const {equipoData} = useSeccionEquipo(fkequipo);
     const {fetchLectura} = useLecturaEtapa();
 
-    console.log("fk del proceso en planta: ", fkProcesoId);
 
     // Función para obtener los datos de la planta
     const obtenerDatosEtapa = async () => {
         if (!fkEtapaId) return; // evita la llamada si fkEtapaId es null o undefined
         try {
             const {fkequipo, etapaNombre, duracion, created, hora, estatus} = await fetchEtapaId(fkEtapaId);
-            console.log("ID de equipo:", fkequipo);
-            console.log("Nombre de la planta", etapaNombre);
-            console.log("Nombre de la planta", duracion);
-            console.log("Nombre de la planta", created);
-            console.log("Nombre de la planta", hora);
+
 
             if (fkequipo) {
                 setFkequipo(fkequipo); // fk equipo
@@ -103,9 +98,6 @@ export default function PanelEtapa() {
         recargarDatosSensores();
     }, []);
 
-    console.log("lectura data:", lecturaDatas)
-
-
 
     // Aplana los datos de lecturaDatas en un solo array
     const allLecturaData = Object.values(lecturaDatas).flat();
@@ -120,7 +112,6 @@ export default function PanelEtapa() {
         }
         return {sensorId, lastValue: null};
     });
-    console.log(lastData);
 
     //datos de los sensores
     const phData = lastData.find(sensor => sensor.sensorId === '22');
@@ -205,7 +196,7 @@ export default function PanelEtapa() {
 
 
     return (
-        <div>
+        <div className="paneletapa">
             <BreadcrumbSection />
 
             <div className="flex flex-col gap-4 mb-4">

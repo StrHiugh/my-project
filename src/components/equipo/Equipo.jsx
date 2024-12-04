@@ -15,14 +15,12 @@ import {Plus} from "lucide-react";
 import AddProceso from "../proceso/AddProceso.jsx";
 import {useNavigate} from "react-router-dom";
 import AddEquipo from "./AddEquipo.jsx";
-
+import "./equipo.css"
 export default function Equipo() {
     const {equipos, setEquipos, fetchEquipos, postEquipos} = useEquipo(); // Obtiene equipos y error
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalBackdrop, setModalBackdrop] = useState('blur');
     const navigate = useNavigate();
-
-    console.log(equipos);
 
 
     // Función para obtener los equipos usando el hook
@@ -40,10 +38,8 @@ export default function Equipo() {
     }, []);
 
     const handleAddEquipo = async (nuevoEquipo) => {
-        console.log("nuevo proceso:", nuevoEquipo); // Verifica el contenido de nuevaEtapa
         try {
             const data = await postEquipos(nuevoEquipo);
-            console.log("Nuevo proceso creado:", data);
             await getEquipos();  // Reutiliza la función que obtienes los datos
 
         } catch (error) {
@@ -97,9 +93,9 @@ export default function Equipo() {
         return (
             <div className="flex flex-col gap-4 mb-4">
                 <div className="flex justify-between gap-3 items-end">
-                    <h1 className="pro-text">Equipos</h1>
+                    <h1 className="pro-text">Totems</h1>
                     <Button color="secondary" endContent={<Plus/>} onPress={() => setModalOpen(true)}>
-                        Nuevo Equipo
+                        Nuevo Totem
                     </Button>
                 </div>
             </div>
@@ -111,7 +107,7 @@ export default function Equipo() {
 
 
     return (
-        <div>
+        <div className="equipo">
             {topContent}
             <Card>
                 <CardBody>

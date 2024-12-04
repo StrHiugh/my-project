@@ -1,4 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
+import {useAuth} from "./useAuth.jsx";
 
 
 
@@ -6,8 +7,8 @@ export function useSeccionEquipo(fkequipo) {
     const [equipoData, setEquipoData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const token = localStorage.getItem('token');
-
+    const { getToken } = useAuth();
+    const token = getToken();
     const fetchSeccionEquipo = useCallback(async () => {
         setLoading(true);
         setError(null);

@@ -15,20 +15,17 @@ import AddProceso from "../proceso/AddProceso.jsx";
 import {useNavigate} from "react-router-dom";
 import {useProducto} from "../composables/useProducto.jsx";
 import AddProducto from "./AddProducto.jsx";
-
+import "./producto.css"
 export default function Producto() {
     const {productos, fetchProducto, postProducto} = useProducto(); // Obtiene equipos y error
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalBackdrop, setModalBackdrop] = useState('blur');
     const navigate = useNavigate();
 
-    console.log(productos);
 
     const handleAddProducto = async (nuevoProducto) => {
-        console.log("nuevo producto:", nuevoProducto); // Verifica el contenido de nuevaEtapa
         try {
             const data = await postProducto(nuevoProducto);
-            console.log("Nuevo producto creado:", data);
             await fetchProducto();
             setModalOpen(false);
 
@@ -88,7 +85,7 @@ export default function Producto() {
 
 
     return (
-        <div>
+        <div className="producto">
             {topContent}
             <Card>
                 <CardBody>

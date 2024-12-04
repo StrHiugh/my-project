@@ -32,7 +32,6 @@ export default function AddProceso({ isOpen, onClose, backdrop, onAddProceso }) 
             fkequipo: selectedEquipo,
         };
 
-        console.log("Nuevo proceso agregado:", nuevoProceso);
 
         if (typeof onAddProceso === 'function') {
             onAddProceso(nuevoProceso); // Verifica que onAddEtapa sea una función
@@ -60,12 +59,12 @@ export default function AddProceso({ isOpen, onClose, backdrop, onAddProceso }) 
             <ModalContent>
                 {() => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">Añadir Proceso</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1">Añadir Tarea</ModalHeader>
                         <ModalBody>
                             <Input
                                 autoFocus
                                 label="Nombre"
-                                placeholder="Ingresa el nombre del proceso"
+                                placeholder="Ingresa el nombre de la tarea"
                                 variant="bordered"
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)} // Maneja el cambio en el input
@@ -79,9 +78,9 @@ export default function AddProceso({ isOpen, onClose, backdrop, onAddProceso }) 
                             />
                             <Select
                                 label="Equipo"
-                                placeholder="Selecciona un equipo"
+                                placeholder="Selecciona un totem"
                                 className="max-w-full"
-                                description="Debes seleccionar el equipo al que pertenece"
+                                description="Debes seleccionar el totem al que pertenece"
                                 onChange={(e) => setSelectedEquipo(e.target.value)} // Maneja la selección del equipo
                                 value={selectedEquipo} // Controla el valor del Select
                             >
@@ -100,7 +99,7 @@ export default function AddProceso({ isOpen, onClose, backdrop, onAddProceso }) 
                                 Cerrar
                             </Button>
                             <Button color="secondary" onPress={handleAdd}>
-                                Agregar Proceso
+                                Agregar Tarea
                             </Button>
                         </ModalFooter>
                     </>

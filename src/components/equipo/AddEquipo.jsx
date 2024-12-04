@@ -35,7 +35,6 @@ export default function AddEquipo({ isOpen, onClose, backdrop, onAddEquipo }) {
             fkproducto: selectedProducto,
         };
 
-        console.log("Nuevo equipo agregado:", nuevoEquipo);
 
         if (typeof onAddEquipo === 'function') {
             onAddEquipo(nuevoEquipo); // Verifica que onAddEtapa sea una función
@@ -64,12 +63,12 @@ export default function AddEquipo({ isOpen, onClose, backdrop, onAddEquipo }) {
             <ModalContent>
                 {() => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">Añadir Equipo</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1">Añadir Totem</ModalHeader>
                         <ModalBody>
                             <Input
                                 autoFocus
                                 label="Nombre"
-                                placeholder="Ingresa el nombre del equipo"
+                                placeholder="Ingresa el nombre del totem"
                                 variant="bordered"
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)} // Maneja el cambio en el input
@@ -83,12 +82,12 @@ export default function AddEquipo({ isOpen, onClose, backdrop, onAddEquipo }) {
                             />
                             <Select
                                 label="Planta"
-                                placeholder="Selecciona una planta"
+                                placeholder="Selecciona una depuradora"
                                 className="max-w-full"
                                 onChange={(e) => setSelectedPlanta(e.target.value)} // Maneja la selección del equipo
                                 value={selectedPlanta} // Controla el valor del Select
                             >
-                                <SelectSection title="Equipos">
+                                <SelectSection title="Plantas">
                                     {plantas.map((planta) => (
                                         <SelectItem key={planta.id} value={planta.id}>
                                             {planta.nombre}
@@ -105,7 +104,7 @@ export default function AddEquipo({ isOpen, onClose, backdrop, onAddEquipo }) {
                                 onChange={(e) => setSelectedProducto(e.target.value)} // Maneja la selección del equipo
                                 value={selectedProducto} // Controla el valor del Select
                             >
-                                <SelectSection title="Equipos">
+                                <SelectSection title="Producto">
                                     {productos.map((producto) => (
                                         <SelectItem key={producto.id} value={producto.id}>
                                             {producto.nombre}
@@ -121,7 +120,7 @@ export default function AddEquipo({ isOpen, onClose, backdrop, onAddEquipo }) {
                                 Cerrar
                             </Button>
                             <Button color="secondary" onPress={handleAdd}>
-                                Agregar Equipo
+                                Agregar Totem
                             </Button>
                         </ModalFooter>
                     </>

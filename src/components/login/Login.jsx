@@ -1,16 +1,21 @@
 import "./login.css";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {Suspense, useEffect, useState} from "react";
 import {Button, Card, CardBody, CardHeader, Input} from "@nextui-org/react";
 import {Lumiflex} from "uvcanvas";
-
+import CryptoJS from "crypto-js";
+import Cookies from "js-cookie";
+import Dashboard from "../dashboard/Dashboard.jsx";
+const SECRET_KEY = "abcdefghi123456789";
 export default function Login() {
     const location = useLocation();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
     const handleLogin = async () => {
+        setIsLoggingIn(true);
         const response = await fetch('http://localhost:8000/api-token-auth/', {
             method: 'POST',
             headers: {
@@ -22,16 +27,20 @@ export default function Login() {
         const data = await response.json();
 
         if (response.ok) {
-            localStorage.setItem('token', data.token); // Guardar token
+            localStorage.setItem('first_name', data.first_name);
+            const encryptedToken = CryptoJS.AES.encrypt(data.token, SECRET_KEY).toString();
+            // Guarda el token en cookies
+            Cookies.set('auth_token', encryptedToken, {
+                secure: true, // Asegura la cookie solo en HTTPS
+                sameSite: 'Strict', // Evita el envío de cookies a sitios de terceros
+                expires: 7, // Duración en días (por ejemplo, 7 días)
+            });
             navigate('/'); // Redirigir al dashboard o página de inicio
+            setIsLoggingIn(false);
         } else {
             alert('Usuario o contraseña incorrectos');
         }
     };
-
-
-
-
 
     useEffect(() => {
         const rootElement = document.getElementById("root");
@@ -72,8 +81,11 @@ export default function Login() {
                                         onChange={(e) => setPassword(e.target.value)}/>
 
                                     <Button color="secondary" onClick={handleLogin}>
-                                        Login
+                                        {isLoggingIn ? "Iniciando sesión..." : "Iniciar sesión"}
                                     </Button>
+                                    {/* Suspense para manejar la carga del componente del Dashboard */}
+                                    <Suspense fallback={<div>Cargando dashboard...</div>}>
+                                    </Suspense>
                                 </div>
                             </CardBody>
                         </Card>

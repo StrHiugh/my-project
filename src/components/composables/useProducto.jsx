@@ -1,11 +1,13 @@
 import {useState, useCallback, useEffect} from 'react';
+import {useAuth} from "./useAuth.jsx";
 
 // Hook personalizado para manejar productos
 export function useProducto() {
     const [productos, setProductos] = useState(null);
     const [error, setError] = useState(null);
     const [valores, setValores] = useState([]);
-    const token = localStorage.getItem('token');
+    const { getToken } = useAuth();
+    const token = getToken();
 
     // Función para obtener productos (GET)
     const fetchProducto = useCallback(async () => {

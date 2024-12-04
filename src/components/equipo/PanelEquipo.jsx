@@ -15,7 +15,7 @@ import {Plus} from "lucide-react";
 import AddEquipo from "./AddEquipo.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useSeccionEquipo} from "../composables/useEquipoSeccion.jsx";
-
+import "./panelequipo.css"
 export default function PanelEquipo() {
 
     const [isModalOpen, setModalOpen] = useState(false);
@@ -23,7 +23,6 @@ export default function PanelEquipo() {
     const navigate = useNavigate();
     const { fkEquipoId } = useParams();
     const {equipoData, loading, error} = useSeccionEquipo(fkEquipoId); // Obtiene equipos y error
-    console.log(equipoData);
 
     const columns = [
         {name: "ID", uid: "id"},
@@ -69,7 +68,7 @@ export default function PanelEquipo() {
         return (
             <div className="flex flex-col gap-4 mb-4">
                 <div className="flex justify-between gap-3 items-end">
-                    <h1 className="pro-text">Panel Equipo</h1>
+                    <h1 className="pro-text">Panel Totem</h1>
                 </div>
             </div>
         );
@@ -80,10 +79,10 @@ export default function PanelEquipo() {
 
 
     return (
-        <div>
+        <div className="panelequipo">
             <Breadcrumbs variant="solid">
-                <BreadcrumbItem onPress={() => navigate(`/Equipo`)}>Equipo</BreadcrumbItem>
-                <BreadcrumbItem>Panel Equipo</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(`/Equipo`)}>Totems</BreadcrumbItem>
+                <BreadcrumbItem>Panel Totem</BreadcrumbItem>
             </Breadcrumbs>
             {topContent}
             <Card>

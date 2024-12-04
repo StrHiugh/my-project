@@ -1,14 +1,16 @@
 import {useState, useEffect, useCallback} from 'react';
+import {useAuth} from "./useAuth.jsx";
 
 export function usePlanta() {
     const [plantas, setPlantas] = useState(null);
     const [error, setError] = useState(null);
-
+    const { getToken } = useAuth();
+    const token = getToken();
     const fetchPlantas = useCallback(async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/planta/`, {
                 headers: {
-                    Authorization: `Token cfc8340bc8d44383934ef380d4a9f71c26305ad6`,
+                    Authorization: `Token ${token}`,
                 },
             });
 

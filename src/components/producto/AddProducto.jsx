@@ -36,7 +36,6 @@ export default function AddProducto({ isOpen, onClose, backdrop, onAddProducto }
             ]
         };
 
-        console.log("Nuevo equipo agregado:", nuevoProduto);
 
         if (typeof onAddProducto === 'function') {
             onAddProducto(nuevoProduto); // Verifica que onAddEtapa sea una función

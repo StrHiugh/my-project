@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import {useSeccionEquipo} from "./useEquipoSeccion.jsx";
+import {useAuth} from "./useAuth.jsx";
 export const useEtapa = () => {
     const [etapaData, setEtapaData] = useState(null);
     const [etapaFkProceso, setFkProceso] = useState(null);
     const [etapaDetail, setEtapaDetail] = useState(null);  // Para almacenar los datos de fetchEtapaid
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const token = localStorage.getItem('token');
+    const { getToken } = useAuth();
+    const token = getToken();
 
     // Función para obtener etapas por fkProcesoId
     async function fetchEtapa(fkProcesoId) {
@@ -46,7 +48,6 @@ export const useEtapa = () => {
             }
 
             const data = await response.json();
-            console.log("Respuesta de la API:", data); // Verifica la respuesta aquí
 
             if (!data || data.results.length === 0) {
                 throw new Error('No se encontraron datos en la respuesta');
@@ -65,10 +66,6 @@ export const useEtapa = () => {
             };
 
             const fkProceso = etapa.fkProceso;
-
-            console.log('Objeto Principal:', etapaPrincipal);
-            console.log('Objeto fkProceso:', fkProceso.fkequipo);
-
             const etapaNombre = etapa?.nombre;  // Obtenemos el nombre del proceso
             const fkequipo = fkProceso?.fkequipo; // Obtén fkequipo del fkProceso
             const duracion = etapa?.duracion; // Obtén fkequipo del fkProceso

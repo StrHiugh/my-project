@@ -14,7 +14,7 @@ import {
 import AddProceso from "../proceso/AddProceso.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useSeccionSensor} from "../composables/useSeccionSensor.jsx";
-
+import "./seccionsensor.css"
 export default function SeccionSensor() {
 
     const [isModalOpen, setModalOpen] = useState(false);
@@ -22,7 +22,6 @@ export default function SeccionSensor() {
     const navigate = useNavigate();
     const { fkSensorId } = useParams();
     const {data, loading, error} = useSeccionSensor(fkSensorId); // Obtiene equipos y error
-    console.log(data);
 
     const columns = [
         {name: "ID", uid: "id"},
@@ -70,7 +69,7 @@ export default function SeccionSensor() {
 
 
     return (
-        <div>
+        <div className="seccionSensor">
             <Breadcrumbs variant="solid">
                 <BreadcrumbItem onPress={() => navigate(`/Equipo`)}>Equipo</BreadcrumbItem>
                 <BreadcrumbItem onPress={() => navigate(-1)}>Panel Equipo</BreadcrumbItem>

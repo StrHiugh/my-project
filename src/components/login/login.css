@@ -24,5 +24,4 @@
 .login {
     position: relative; /* Mantiene el contenido sobre el fondo */
     z-index: 1; /* Prioriza el contenido */
-    left: 430px;
 }

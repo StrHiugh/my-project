@@ -1,10 +1,12 @@
 import {useState, useCallback, useEffect} from 'react';
+import {useAuth} from "./useAuth.jsx";
 
 // Hook personalizado para obtener sensores
 export function useSensores() {
     const [sensores, setSensores] = useState(null);
     const [error, setError] = useState(null);
-    const token = localStorage.getItem('token');
+    const { getToken } = useAuth();
+    const token = getToken();
 
     // Función para obtener los sensores
     const fetchSensor = useCallback(async () => {

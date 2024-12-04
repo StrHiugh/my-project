@@ -24,7 +24,6 @@ const parseDate = (dateString) => {
         return new Date(2024, monthIndex, 1); // Usar 1 como día y un año fijo (por ejemplo, 2024)
     }
 
-    console.warn("Formato de fecha no reconocido:", dateString);
     return null; // Retornar null si el formato no es válido
 };
 

@@ -7,7 +7,7 @@ import StackedGraphic from "../charts/StackedGraphic.jsx";
 import {useLecturaEtapa} from "../composables/useLecturaEtapa.jsx";
 import {useEffect, useState} from "react";
 import {usePlanta} from "../composables/usePlanta.jsx";
-
+import "./dashboard.css"
 export default function Dashboard() {
     const {fetchLectura, fetchLecturaGeneral,} = useLecturaEtapa();
     const [lecturaDatas, setLecturaData] = useState([]);
@@ -33,7 +33,6 @@ export default function Dashboard() {
         recargarDatosSensores();
     }, []);
 
-    console.log(lecturaDatas)
     //ultimop dato para los gauges
     const lastData = Object.entries(lecturaDatas).map(([sensorId, data]) => {
         if (data.length > 0) {
@@ -44,7 +43,6 @@ export default function Dashboard() {
         }
         return {sensorId, lastValue: null};
     });
-    console.log(lastData);
 
     //datos de los sensores
     const phData = lastData.find(sensor => sensor.sensorId === '22');
@@ -53,8 +51,7 @@ export default function Dashboard() {
 
 
     return (
-        <div>
-
+        <div className="dashboard">
             <div className="flex">
                 <div>
                 <Tabs aria-label="Options" color="secondary" variant="solid">

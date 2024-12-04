@@ -41,10 +41,8 @@ function Proceso() {
     }, []);
 
     const handleAddProceso = async (nuevoProceso) => {
-        console.log("nuevo proceso:", nuevoProceso); // Verifica el contenido de nuevaEtapa
         try {
             const data = await postProceso(nuevoProceso);
-            console.log("Nuevo proceso creado:", data);
             await getProcesses();  // Reutiliza la función que obtienes los datos
 
         } catch (error) {
@@ -94,9 +92,9 @@ function Proceso() {
         return (
             <div className="flex flex-col gap-4 mb-4">
                 <div className="flex justify-between gap-3 items-end">
-                    <h1 className="pro-text">Procesos</h1>
+                    <h1 className="pro-text">Tarea</h1>
                     <Button color="secondary" endContent={<Plus/>} onPress={() => setModalOpen(true)}>
-                        Nuevo Proceso
+                        Nueva Tarea
                     </Button>
                 </div>
             </div>
@@ -111,7 +109,7 @@ function Proceso() {
         return <div>Error: {error}</div>;
     }
     return (
-        <div>
+        <div className="proceso">
             {topContent}
             <Card>
                 <CardBody>

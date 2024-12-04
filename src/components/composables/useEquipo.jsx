@@ -20,7 +20,6 @@ export function useEquipo() {
             }
 
             const data = await response.json();
-            console.log(token)
             setEquipos(data.results);
             return data.results; // Devuelve solo las etapas si no hay fkequipo
 

@@ -17,4 +17,20 @@
     font-family: Open Sans; /* Ajusta el valor de padding según lo que necesites */
 }
 
+.paneletapa {
+    margin-left: 23%; /* Ajusta esto según el ancho del Sidebar */
+    margin-right: 23%; /* Ajusta esto según el ancho del Sidebar */
 
+}
+
+@media (max-width: 830px) {
+    .paneletapa {
+        margin-left: 0%; /* Ajusta el margen para pantallas más pequeñas */
+    }
+}
+
+@media (min-width: 1920px) {
+    .paneletapa {
+        margin-left: 23%; /* Ajusta el margen para pantallas grandes */
+    }
+}

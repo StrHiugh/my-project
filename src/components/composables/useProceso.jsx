@@ -2,8 +2,12 @@
 
 
 
+import Cookies from "js-cookie";
+import {useAuth} from "./useAuth.jsx";
+
 export function useProceso() {
-    const token = localStorage.getItem('token');
+    const { getToken } = useAuth();
+    const token = getToken();
     // Método para obtener procesos (GET)
     const fetchProceso = async () => {
         try {
@@ -20,7 +24,6 @@ export function useProceso() {
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error(error);
             throw error; // Lanza el error para manejarlo más tarde
         }
     };

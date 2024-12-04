@@ -11,32 +11,14 @@
     margin: 0; /* Eliminar margen */
 }
 
-
-.App .content {
-    margin-left: 150px; /* Ajusta esto según el ancho del Sidebar */
-    padding: 0; /* Eliminar cualquier padding */
-    display: flex;
-}
-
-section {
-    margin-top: 30px; /* Para que el contenido esté justo debajo del Topbar */
-}
-
-.logo h1 {
-    margin: 0;
-}
-
-.nav-links {
-    display: flex;
-    gap: 15px; /* Espaciado uniforme entre los links */
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold; /* Opción para resaltar los enlaces */
-}
-
-.nav-links a:hover {
+/* Estilo para los enlaces activos */
+.active-link {
+    font-weight: bold;
+    color: var(--nextui-colors-secondary); /* Cambia al color secundario de NextUI */
     text-decoration: underline;
+}
+
+/* Estilo para los enlaces inactivos */
+.navbar-item a {
+    color: var(--nextui-colors-foreground);
 }

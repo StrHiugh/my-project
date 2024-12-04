@@ -12,14 +12,13 @@ import {
 } from "@nextui-org/react";
 import {useNavigate} from "react-router-dom";
 import {usePlanta} from "../composables/usePlanta.jsx";
-
+import "./planta.css"
 export default function Planta() {
     const {plantas, error, fetchPlantas} = usePlanta();
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalBackdrop, setModalBackdrop] = useState('blur');
     const navigate = useNavigate();
 
-    console.log(plantas);
 
     const columns = [
         {name: "ID", uid: "id"},
@@ -65,14 +64,14 @@ export default function Planta() {
         return (
             <div className="flex flex-col gap-4 mb-4">
                 <div className="flex justify-between gap-3 items-end">
-                    <h1 className="pro-text">Plantas</h1>
+                    <h1 className="pro-text">Depuradoras</h1>
                 </div>
             </div>
         );
     }, []);
 
     return (
-        <div>
+        <div className="planta">
             {topContent}
             <Card>
                 <CardBody>

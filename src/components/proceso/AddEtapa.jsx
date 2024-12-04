@@ -25,7 +25,6 @@ export default function AddEtapa({ isOpen, onClose, backdrop, setBackdrop, onAdd
             duracion: duracionFormatted,
         };
 
-        console.log("Nueva planta agregada:", nuevaEtapa);
 
         if (typeof onAddEtapa === 'function') {
             onAddEtapa(nuevaEtapa); // Verifica que onAddEtapa sea una función

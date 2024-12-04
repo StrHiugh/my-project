@@ -1,24 +1,18 @@
-.panel{
-    font-size: 20px;
-    font-weight: bold;
-    font-family: Open Sans;
 
-}
-
-.panelprocess {
+.sensores {
     margin-left: 23%; /* Ajusta esto según el ancho del Sidebar */
     margin-right: 23%; /* Ajusta esto según el ancho del Sidebar */
 
 }
 
 @media (max-width: 830px) {
-    .panelprocess {
+    .sensores {
         margin-left: 0%; /* Ajusta el margen para pantallas más pequeñas */
     }
 }
 
 @media (min-width: 1920px) {
-    .panelprocess {
+    .sensores {
         margin-left: 23%; /* Ajusta el margen para pantallas grandes */
     }
 }

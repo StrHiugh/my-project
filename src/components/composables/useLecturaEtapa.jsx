@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {useAuth} from "./useAuth.jsx";
 
 // Hook personalizado para obtener lecturas de planta
 export function useLecturaEtapa() {
@@ -6,8 +7,8 @@ export function useLecturaEtapa() {
     const [data, setData] = useState(null);
     const [dataGeneral, setDataGeneral] = useState(null);
     const [groupedDataG, setGroupedDataG] = useState(null);
-    const token = localStorage.getItem('token');
-
+    const { getToken } = useAuth();
+    const token = getToken();
     // Función para obtener las lecturas por planta
     async function fetchLectura(fkEtapaId) {
         try {
@@ -38,11 +39,9 @@ export function useLecturaEtapa() {
             // Para cada sensorId encontrado en la agrupación, hacemos la petición
             for (const sensorId in groupedData) {
                 if (Object.prototype.hasOwnProperty.call(groupedData, sensorId)) {
-                    console.log(`Realizando petición para sensorId: ${sensorId}`);
 
                     // Ahora, haces la petición específica para este sensorId
                     const sensorData = await fetchLecturaEquipo(fkEtapaId, sensorId);
-                    console.log(`Datos obtenidos para sensor ${sensorId}:`, sensorData);
                 }
             }
 
@@ -87,11 +86,8 @@ export function useLecturaEtapa() {
             // Ahora, usar groupedData en lugar de groupedDataG en el ciclo for
             for (const sensorId in groupedData) {
                 if (Object.prototype.hasOwnProperty.call(groupedData, sensorId)) {
-                    console.log(`Realizando petición para sensorId: ${sensorId} y etapaId: ${groupedData[sensorId][0].fkEtapa}`);
-
                     // Hacer la petición específica para este sensorId y etapaId
                     const sensorData = await fetchLecturaEquipo(groupedData[sensorId][0].fkEtapa, sensorId); // Enviar el etapaId y el sensorId
-                    console.log(`Datos obtenidos para sensor ${sensorId}:`, sensorData);
                 }
             }
 

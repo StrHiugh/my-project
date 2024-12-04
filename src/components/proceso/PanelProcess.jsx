@@ -56,11 +56,8 @@ export default function PanelProcess() {
 
 
     const handleAddEtapa = async (nuevaEtapa) => {
-        console.log("fkProcesoId:", fkProcesoId);
-        console.log("nuevaEtapa:", nuevaEtapa); // Verifica el contenido de nuevaEtapa
         try {
             const data = await postEtapa(fkProcesoId, nuevaEtapa);
-            console.log("Nueva planta creada:", data);
             await obtenerDatosProcess();  // Reutiliza la función que obtienes los datos
 
         } catch (error) {
@@ -111,7 +108,7 @@ export default function PanelProcess() {
     const topContent = (
         <div className="flex flex-col gap-4 mb-4">
             <div className="flex justify-between gap-3 items-end">
-                <h1 className="pro-text">Panel Procesos</h1>
+                <h1 className="pro-text">Panel Tareas</h1>
 
                 <Button color="secondary" endContent={<Plus/>} onPress={() => setModalOpen(true)}>
                     Nueva Etapa
@@ -122,15 +119,15 @@ export default function PanelProcess() {
 
     return (
 
-        <div>
+        <div className="panelprocess">
             <Breadcrumbs variant="solid">
-                <BreadcrumbItem onPress={() => navigate(`/Proceso`)}>Proceso</BreadcrumbItem>
-                <BreadcrumbItem>Panel Proceso</BreadcrumbItem>
+                <BreadcrumbItem onPress={() => navigate(`/Proceso`)}>Tarea</BreadcrumbItem>
+                <BreadcrumbItem>Panel Tareas</BreadcrumbItem>
             </Breadcrumbs>
             {topContent}
             <Card>
                 <CardHeader>
-                    <h2 className="panel">Proceso Actual: {nombreProceso}</h2>
+                    <h2 className="panel">Tarea Actual: {nombreProceso}</h2>
                 </CardHeader>
                 <CardBody>
                     <Table aria-label="Tabla de Procesos">

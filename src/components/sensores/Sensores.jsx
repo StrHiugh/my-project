@@ -12,19 +12,20 @@ import {
 } from "@nextui-org/react";
 import {useNavigate} from "react-router-dom";
 import {useSensores} from "../composables/useSensores.jsx";
-
+import "./sensores.css"
+import CryptoJS from "crypto-js";
+import Cookies from "js-cookie";
+const SECRET_KEY = "abcdefghi123456789";
 export default function Sensores() {
     const {sensores, error, fetchSensor} = useSensores();
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalBackdrop, setModalBackdrop] = useState('blur');
     const navigate = useNavigate();
 
-    console.log(sensores);
-
     const columns = [
         {name: "ID", uid: "id"},
         {name: "Nombre", uid: "name"},
-        {name: "Matricula", uid: "matricula"},
+        {name: "Identificador", uid: "matricula"},
     ];
 
     const renderCell = (item, columnKey) => {
@@ -66,7 +67,7 @@ export default function Sensores() {
     }, []);
 
     return (
-        <div>
+        <div className="sensores">
             {topContent}
             <Card>
                 <CardBody>
