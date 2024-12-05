@@ -1,11 +1,12 @@
 import "./login.css";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Suspense, useEffect, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import {Button, Card, CardBody, CardHeader, Input} from "@nextui-org/react";
 import {Lumiflex} from "uvcanvas";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
-import Dashboard from "../dashboard/Dashboard.jsx";
+import {Eye, EyeOff} from "lucide-react";
+
 const SECRET_KEY = "abcdefghi123456789";
 export default function Login() {
     const location = useLocation();
@@ -13,9 +14,13 @@ export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
+    const [isVisible, setIsVisible] = React.useState(false);
+    const toggleVisibility = () => setIsVisible(!isVisible);
     const handleLogin = async () => {
         setIsLoggingIn(true);
+        setErrorMessage('');
+
         const response = await fetch('http://localhost:8000/api-token-auth/', {
             method: 'POST',
             headers: {
@@ -38,7 +43,11 @@ export default function Login() {
             navigate('/'); // Redirigir al dashboard o página de inicio
             setIsLoggingIn(false);
         } else {
-            alert('Usuario o contraseña incorrectos');
+            setErrorMessage({
+                username: 'Usuario o contraseña incorrectos',
+                password: 'Usuario o contraseña incorrectos',
+            });
+            setIsLoggingIn(false);
         }
     };
 
@@ -69,16 +78,31 @@ export default function Login() {
                             </CardHeader>
                             <CardBody>
                                 <div className="grid grid-cols-1 grid-rows-3 gap-6">
+
                                     <Input
                                         type="usuario"
                                         label="Usuario"
                                         value={username}
-                                        onChange={(e) => setUsername(e.target.value)}/>
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        isInvalid={!!errorMessage.username}
+                                    />
                                     <Input
-                                        type="password"
                                         label="Contraseña"
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}/>
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        isInvalid={!!errorMessage.password}
+                                        errorMessage={errorMessage.password}
+                                        endContent={
+                                            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+                                                {isVisible ? (
+                                                    <Eye className="text-2xl text-default-400 pointer-events-none" />
+                                                ) : (
+                                                    <EyeOff className="text-2xl text-default-400 pointer-events-none" />
+                                                )}
+                                            </button>
+                                        }
+                                        type={isVisible ? "text" : "password"}
+                                    />
 
                                     <Button color="secondary" onClick={handleLogin}>
                                         {isLoggingIn ? "Iniciando sesión..." : "Iniciar sesión"}
