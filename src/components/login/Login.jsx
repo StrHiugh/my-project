@@ -1,11 +1,13 @@
 import "./login.css";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Suspense, useEffect, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import {Button, Card, CardBody, CardHeader, Input} from "@nextui-org/react";
 import {Lumiflex} from "uvcanvas";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
-import Dashboard from "../dashboard/Dashboard.jsx";
+import logocop from "../../assets/logocop2.png"
+import {Eye, EyeOff} from "lucide-react";
+
 const SECRET_KEY = "abcdefghi123456789";
 export default function Login() {
     const location = useLocation();
@@ -13,10 +15,17 @@ export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState({
+        username: '',
+        password: '',
+    });    const [isVisible, setIsVisible] = React.useState(false);
+    const toggleVisibility=() => setIsVisible(!isVisible);
     const handleLogin = async () => {
         setIsLoggingIn(true);
-        const response = await fetch('http://localhost:8000/api-token-auth/', {
+        setErrorMessage({
+            username: '',
+            password: '',
+        });        const response = await fetch('http://localhost:8000/api-token-auth/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,8 +46,13 @@ export default function Login() {
             });
             navigate('/'); // Redirigir al dashboard o página de inicio
             setIsLoggingIn(false);
+
         } else {
-            alert('Usuario o contraseña incorrectos');
+            setErrorMessage({
+                username: 'Usuario o contraseña incorrectos',
+                password: 'Usuario o contraseña incorrectos',
+            });
+            setIsLoggingIn(false);
         }
     };
 
@@ -64,8 +78,8 @@ export default function Login() {
                 <div className="grid grid-cols-4 grid-rows-6 gap-3">
                     <div className="col-span-2 row-span-4 col-start-2 row-start-2">
                         <Card className="sm:w-full md:w-96 lg:w-[420px]">
-                            <CardHeader className="flex justify-center items-center text-4xl text-center">
-                                Iniciar Sesión
+                            <CardHeader className="flex justify-center items-center">
+                                <img src={logocop} alt="Logo Cop" className="w-[300px] h-auto object-cover"/>
                             </CardHeader>
                             <CardBody>
                                 <div className="grid grid-cols-1 grid-rows-3 gap-6">
@@ -73,12 +87,28 @@ export default function Login() {
                                         type="usuario"
                                         label="Usuario"
                                         value={username}
-                                        onChange={(e) => setUsername(e.target.value)}/>
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        isInvalid={!!errorMessage.username}
+                                        errorMessage={errorMessage.username}
+
+                                    />
                                     <Input
-                                        type="password"
                                         label="Contraseña"
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}/>
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        isInvalid={!!errorMessage.password} // Activar error si hay mensaje
+                                        errorMessage={errorMessage.password}
+                                        endContent={
+                                            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+                                                {isVisible ? (
+                                                    <Eye className="text-2xl text-default-400 pointer-events-none" />
+                                                ) : (
+                                                    <EyeOff className="text-2xl text-default-400 pointer-events-none" />
+                                                )}
+                                            </button>
+                                        }
+                                        type={isVisible ? "text" : "password"}
+                                    />
 
                                     <Button color="secondary" onClick={handleLogin}>
                                         {isLoggingIn ? "Iniciando sesión..." : "Iniciar sesión"}

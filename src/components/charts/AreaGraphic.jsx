@@ -41,13 +41,13 @@ export default function AreaGraphic({ lecturaDatas, sensorName  }) {
         annotations: {
             yaxis: [{
                 y: 30,
-                borderColor: '#7827c8',
+                borderColor: '#2d9fae',
                 label: {
                     show: true,
                     text: 'Support',
                     style: {
                         color: "#fff",
-                        background: '#7827c8'
+                        background: '#2d9fae'
                     }
                 }
             }],
@@ -60,7 +60,7 @@ export default function AreaGraphic({ lecturaDatas, sensorName  }) {
         markers: {
             size: 0,
             style: 'hollow',
-            colors: ['#7827c8']
+            colors: ['#2d9fae']
         },
         xaxis: {
             type: 'datetime', // Cambiar a 'datetime' para manejar mejor las fechas
@@ -72,18 +72,18 @@ export default function AreaGraphic({ lecturaDatas, sensorName  }) {
             },
             marker: {
                 show: true, // Muestra el punto en el tooltip
-                fillColors: ['#7827c8'] // Cambia el color del punto a morado
+                fillColors: ['#2d9fae'] // Cambia el color del punto a morado
             }
         },
         fill: {
             type: 'solid',
-            colors: ['#7827c8'],
+            colors: ['#2d9fae'],
             opacity: 0.6
         },
         stroke: {
             curve: 'smooth',
             width: 3,
-            colors: ['#7827c8']
+            colors: ['#2d9fae']
         }
     });
 

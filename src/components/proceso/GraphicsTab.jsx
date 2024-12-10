@@ -20,7 +20,7 @@ export default function GraphicsTab({ phData, oxigenoData, tempData, recargarDat
                         <GaugeRadial
                             labels="pH"
                             series={phData ? parseFloat(phData.lastValue) : 0}
-                            labelColor='#7827c8'
+                            labelColor='#11181c'
                             sensorType="ph"
                         />
                         )}
@@ -37,7 +37,7 @@ export default function GraphicsTab({ phData, oxigenoData, tempData, recargarDat
                         <GaugeRadial
                             labels="Oxigeno Disuelto"
                             series={oxigenoData ? parseFloat(oxigenoData.lastValue) : 0}
-                            labelColor='#7827c8'
+                            labelColor='#11181c'
                             sensorType="oxygen"
                         />)}
 
@@ -54,7 +54,7 @@ export default function GraphicsTab({ phData, oxigenoData, tempData, recargarDat
                         <GaugeRadial
                             labels="Temperatura"
                             series={tempData ? parseFloat(tempData.lastValue) : 0}
-                            labelColor='#7827c8'
+                            labelColor='#11181c'
                             sensorType="temperature"
                         />)}
                         <Button color="secondary" onPress={recargarDatosSensores}>

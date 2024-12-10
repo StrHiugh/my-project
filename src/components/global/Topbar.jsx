@@ -15,6 +15,7 @@ import {
 } from "@nextui-org/react";
 import {useLocation, useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
+import logocop from "../../assets/logocop2.png";
 
 const Topbar = () => {
         const navigate = useNavigate();
@@ -42,13 +43,14 @@ const Topbar = () => {
 
                 <NavbarContent className="sm:hidden pr-3" justify="center">
                     <NavbarItem className="mr-4">
-                        <Link color="secondary" href="#">
+                        <Link color="Primary" href="/">
                             Cooperativa Transformando Mecoacán
                         </Link>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                    <NavbarItem className="mr-4">
+                    <NavbarItem className="mr-4 flex items-center">
+                        <img src={logocop} alt="Logo Cop" className="w-[60px] h-auto object-cover items-start"/>
                         <Link color="secondary" href="/" className="text-xl font-semibold"
                               active={location.pathname === '/'}>
                             Cooperativa Transformando Mecoacán
